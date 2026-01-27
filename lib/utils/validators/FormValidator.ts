@@ -1,5 +1,5 @@
-import { SignInFormInput, ValidationError } from '@/lib/utils/validators/types';
-import { validateSignInForm } from '@/lib/utils/validators/validateSignInForm';
+import { SignInFormInput, ValidationError } from './types';
+import { validateSignInForm } from './validateSignInForm';
 
 export class FormValidator {
 	static validateSignIn(data: SignInFormInput): ValidationError[] {

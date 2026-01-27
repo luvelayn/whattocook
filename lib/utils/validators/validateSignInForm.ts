@@ -1,4 +1,4 @@
-import { SignInFormInput, ValidationError } from '@/lib/utils/validators/types';
+import { SignInFormInput, ValidationError } from './types';
 
 export function validateSignInForm(data: SignInFormInput): ValidationError[] {
 	const errors: ValidationError[] = [];

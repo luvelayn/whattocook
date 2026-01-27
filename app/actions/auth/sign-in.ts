@@ -2,7 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
-import { FormValidator } from '@/lib/utils/validators/FormValidator';
+import { FormValidator } from '@/lib/utils';
 
 export type SignInFormState = {
 	errors: {
@@ -10,7 +10,7 @@ export type SignInFormState = {
 		password?: string[];
 		general?: string;
 	};
-	redirectTo?: string;
+	redirect?: string;
 };
 
 export async function signIn(
@@ -21,7 +21,7 @@ export async function signIn(
 
 	let email = formData.get('email') as string;
 	const password = formData.get('password') as string;
-	const redirectTo = (formData.get('redirectTo') as string) || '/';
+	const redirect = (formData.get('redirectTo') as string) || '/';
 
 	email = email.trim();
 
@@ -53,7 +53,7 @@ export async function signIn(
 
 		return {
 			errors: {},
-			redirectTo,
+			redirect: redirect,
 		};
 	} catch (error) {
 		console.error('SignIn error: ', error);

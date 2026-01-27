@@ -30,7 +30,7 @@ export function SignInForm() {
 		if (!state.errors && state?.redirect) {
 			router.push(redirectTo);
 		}
-	}, [state.errors, state?.redirect]);
+	}, [redirectTo, router, state]);
 
 	return (
 		<Card className="w-full max-w-sm">
@@ -40,7 +40,7 @@ export function SignInForm() {
 				</CardTitle>
 			</CardHeader>
 			<CardContent>
-				<form action={formAction}>
+				<form id="sign-in-form" action={formAction}>
 					<div className="flex flex-col gap-4">
 						<Input type="hidden" name="redirect" value={redirectTo} />
 						<div className="grid gap-2">
@@ -48,6 +48,7 @@ export function SignInForm() {
 							<Input
 								id="email"
 								type="email"
+								name="email"
 								placeholder="you@example.com"
 								autoComplete="email"
 								required
@@ -73,6 +74,7 @@ export function SignInForm() {
 							<Input
 								id="password"
 								type="password"
+								name="password"
 								placeholder="••••••••"
 								required
 								disabled={isPending}
@@ -94,7 +96,12 @@ export function SignInForm() {
 				</form>
 			</CardContent>
 			<CardFooter className="flex flex-col gap-3">
-				<Button type="submit" className="w-full" disabled={isPending}>
+				<Button
+					type="submit"
+					form="sign-in-form"
+					className="w-full"
+					disabled={isPending}
+				>
 					{isPending ? 'Вход...' : 'Войти'}
 				</Button>
 				<Link

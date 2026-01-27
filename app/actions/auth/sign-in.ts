@@ -21,7 +21,7 @@ export async function signIn(
 
 	let email = formData.get('email') as string;
 	const password = formData.get('password') as string;
-	const redirect = (formData.get('redirectTo') as string) || '/';
+	const redirect = (formData.get('redirect') as string) || '/';
 
 	email = email.trim();
 

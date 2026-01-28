@@ -2,14 +2,9 @@
 
 import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
-import { FormValidator } from '@/lib/utils';
 
 export type SignInFormState = {
-	errors: {
-		email?: string[];
-		password?: string[];
-		general?: string;
-	};
+	error: string | null;
 	redirect?: string;
 };
 
@@ -25,14 +20,6 @@ export async function signIn(
 
 	email = email.trim();
 
-	const errors = FormValidator.validateSignIn({ email, password });
-
-	if (errors.length !== 0) {
-		return {
-			errors: FormValidator.formatErrors(errors),
-		};
-	}
-
 	try {
 		const { error } = await supabase.auth.signInWithPassword({
 			email,
@@ -41,26 +28,22 @@ export async function signIn(
 
 		if (error) {
 			return {
-				errors: {
-					general: error.message.includes('credentials')
-						? 'Неверный email или пароль'
-						: error.message,
-				},
+				error: error.message.includes('credentials')
+					? 'Неверный email или пароль'
+					: error.message,
 			};
 		}
 
 		revalidatePath('/');
 
 		return {
-			errors: {},
+			error: null,
 			redirect: redirect,
 		};
 	} catch (error) {
 		console.error('SignIn error: ', error);
 		return {
-			errors: {
-				general: 'Произошла непредвиденная ошибка',
-			},
+			error: 'Произошла непредвиденная ошибка',
 		};
 	}
 }

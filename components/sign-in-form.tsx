@@ -1,7 +1,7 @@
 'use client';
 
 import { signIn, SignInFormState } from '@/app/actions/auth/sign-in';
-import { useActionState, useEffect } from 'react';
+import { useActionState, useEffect, useState } from 'react';
 import {
 	Card,
 	CardContent,
@@ -14,9 +14,10 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { EyeIcon, EyeOffIcon } from 'lucide-react';
 
 const initialState: SignInFormState = {
-	errors: {},
+	error: null,
 };
 
 export function SignInForm() {
@@ -25,42 +26,50 @@ export function SignInForm() {
 	const redirectTo = searchParams.get('redirect') || '/';
 
 	const [state, formAction, isPending] = useActionState(signIn, initialState);
+	const [showPassword, setShowPassword] = useState(false);
 
 	useEffect(() => {
-		if (!state.errors && state?.redirect) {
+		if (!state.error && state.redirect) {
 			router.push(redirectTo);
 		}
 	}, [redirectTo, router, state]);
 
 	return (
-		<Card className="w-full max-w-sm">
-			<CardHeader>
-				<CardTitle className="ml-auto mr-auto">
-					<h2>Вход</h2>
+		<Card className="w-full max-w-sm gap-8">
+			<CardHeader className="grid-rows-[auto]">
+				<CardTitle className="text-center font-jost text-2xl font-medium">
+					Вход
 				</CardTitle>
 			</CardHeader>
 			<CardContent>
-				<form id="sign-in-form" action={formAction}>
+				<form
+					id="sign-in-form"
+					action={formAction}
+					onKeyDown={(e) => {
+						if (e.key === 'Enter' && !isPending) {
+							e.currentTarget.requestSubmit();
+						}
+					}}
+				>
+					<Input type="hidden" name="redirect" value={redirectTo} />
 					<div className="flex flex-col gap-4">
-						<Input type="hidden" name="redirect" value={redirectTo} />
-						<div className="grid gap-2">
+						<div className="flex flex-col gap-2">
 							<Label htmlFor="email">Email</Label>
-							<Input
-								id="email"
-								type="email"
-								name="email"
-								placeholder="you@example.com"
-								autoComplete="email"
-								required
-								disabled={isPending}
-							/>
-							{state.errors.email && (
-								<p className="text-sm text-destructive">
-									{state.errors.email[0]}
-								</p>
-							)}
+							<div>
+								<Input
+									id="email"
+									type="email"
+									name="email"
+									placeholder="you@example.com"
+									autoComplete="email"
+									required
+									disabled={isPending}
+									autoFocus
+									maxLength={254}
+								/>
+							</div>
 						</div>
-						<div className="grid gap-2">
+						<div className="flex flex-col gap-2">
 							<div className="flex items-center justify-between">
 								<Label htmlFor="password">Пароль</Label>
 								{/* TODO добавить ссылку на страницу восстановления пароля */}
@@ -71,27 +80,34 @@ export function SignInForm() {
 									Забыли пароль?
 								</Link>
 							</div>
-							<Input
-								id="password"
-								type="password"
-								name="password"
-								placeholder="••••••••"
-								required
-								disabled={isPending}
-							/>
-							{state.errors.password && (
-								<p className="text-sm text-destructive">
-									{state.errors.password[0]}
-								</p>
-							)}
+							<div className="relative">
+								<Input
+									id="password"
+									type={showPassword ? 'text' : 'password'}
+									name="password"
+									placeholder="••••••••"
+									required
+									disabled={isPending}
+									minLength={8}
+									maxLength={128}
+								/>
+								<Button
+									type="button"
+									variant="ghost"
+									size="sm"
+									className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+									onClick={() => setShowPassword(!showPassword)}
+									disabled={isPending}
+								>
+									{showPassword ? <EyeOffIcon /> : <EyeIcon />}
+								</Button>
+							</div>
 						</div>
-						<div className="grid gap-2">
-							{state.errors.general && (
-								<p className="text-sm text-destructive">
-									{state.errors.general}
-								</p>
-							)}
-						</div>
+						{state.error && (
+							<p className="text-sm text-destructive" role="alert">
+								{state.error}
+							</p>
+						)}
 					</div>
 				</form>
 			</CardContent>

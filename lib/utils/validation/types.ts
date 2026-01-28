@@ -3,7 +3,9 @@ export type ValidationError = {
 	message: string;
 };
 
-export type SignInFormInput = {
+export interface SignUpFormInput {
 	email: string;
 	password: string;
-};
+	confirmPassword: string;
+	name: string;
+}

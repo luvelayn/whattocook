@@ -2,8 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
-import { validateSignUp } from '@/lib/utils/validation/validateSignUp';
-import { formatErrors } from '@/lib/utils/validation/formatErrors';
+import { formatErrors, validateSignUp } from '@/lib/utils';
 
 export type SignUpFormState = {
 	errors: {

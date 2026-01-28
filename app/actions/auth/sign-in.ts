@@ -14,23 +14,24 @@ export async function signIn(
 ): Promise<SignInFormState> {
 	const supabase = await createClient();
 
-	let email = formData.get('email') as string;
-	const password = formData.get('password') as string;
 	const redirect = (formData.get('redirect') as string) || '/';
-
-	email = email.trim();
+	const signInData = {
+		email: (formData.get('email') as string).trim(),
+		password: formData.get('password') as string,
+	};
 
 	try {
-		const { error } = await supabase.auth.signInWithPassword({
-			email,
-			password,
-		});
+		const { error } = await supabase.auth.signInWithPassword(signInData);
 
 		if (error) {
+			let errorMessage = error.message;
+
+			if (error.code === 'invalid_credentials') {
+				errorMessage = 'Неверный email или пароль';
+			}
+
 			return {
-				error: error.message.includes('credentials')
-					? 'Неверный email или пароль'
-					: error.message,
+				error: errorMessage,
 			};
 		}
 

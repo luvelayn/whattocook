@@ -9,14 +9,14 @@ export function ConfirmAccountCard() {
 					<MailCheck className="h-14 w-14 text-primary" />
 				</div>
 				<CardTitle className="text-center font-jost text-2xl font-medium">
-					Подтвердите Ваш аккаунт
+					Подтвердите аккаунт
 				</CardTitle>
 			</CardHeader>
 
 			<CardContent className="space-y-4">
 				<div className="space-y-3 text-sm">
 					<p>
-						На указанную Вашу электронную почту было отправлено письмо с
+						На указанную Вами электронную почту было отправлено письмо с
 						инструкциями.
 					</p>
 					<p>Для завершения регистрации пройдите по ссылке из письма.</p>

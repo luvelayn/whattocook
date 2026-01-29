@@ -1,7 +1,8 @@
 'use client';
 
 import { signUp, SignUpFormState } from '@/app/actions/auth/sign-up';
-import { useActionState, useState } from 'react';
+import { ChangeEvent, FormEvent, useActionState, useState } from 'react';
+import { useFormValidation } from '@/hooks/useFormValidation';
 import {
 	Card,
 	CardContent,
@@ -16,15 +17,40 @@ import { Button } from '@/components/ui/button';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
 
 const initialState: SignUpFormState = {
-	errors: {},
+	error: '',
 };
 
 export function SignUpForm() {
 	const [state, formAction, isPending] = useActionState(signUp, initialState);
 	const [showPassword, setShowPassword] = useState(false);
+	const { fieldErrors, handleBlur, handleChange, handleSubmit } =
+		useFormValidation();
+
+	const [formValues, setFormValues] = useState({
+		email: '',
+		name: '',
+		password: '',
+		confirmPassword: '',
+	});
+
+	const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+		const { name, value } = e.target;
+
+		// Обновляем локальное состояние
+		setFormValues((prev) => ({
+			...prev,
+			[name === 'confirm-password' ? 'confirmPassword' : name]: value,
+		}));
+
+		handleChange(e);
+	};
+
+	const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+		handleSubmit(event, () => {});
+	};
 
 	return (
-		<Card className="w-full max-w-sm gap-8">
+		<Card className="w-full max-w-sm gap-8 pt-8">
 			<CardHeader className="grid-rows-[auto]">
 				<CardTitle className="text-center font-jost text-2xl font-medium">
 					Регистрация
@@ -33,12 +59,14 @@ export function SignUpForm() {
 			<CardContent>
 				<form
 					id="sign-up-form"
+					onSubmit={onSubmit}
 					action={formAction}
 					onKeyDown={(e) => {
 						if (e.key === 'Enter' && !isPending) {
 							e.currentTarget.requestSubmit();
 						}
 					}}
+					noValidate
 				>
 					<div className="flex flex-col gap-4">
 						<div className="flex flex-col gap-2">
@@ -48,20 +76,27 @@ export function SignUpForm() {
 									id="email"
 									type="email"
 									name="email"
+									value={formValues.email}
 									placeholder="example@mail.com"
 									autoComplete="email"
 									required
 									disabled={isPending}
 									autoFocus
 									maxLength={254}
+									pattern="[^\s@]+@[^\s@]+\.[^\s@]+"
+									title="Введите корректный email адрес"
+									aria-errormessage="email-error"
+									onBlur={handleBlur}
+									onChange={onChange}
 								/>
 							</div>
-							{state.errors.email && (
-								<p className="text-sm text-destructive" role="alert">
-									{state.errors.email[0]}
+							{fieldErrors.email && (
+								<p id="email-error" className="text-sm text-destructive">
+									{fieldErrors.email}
 								</p>
 							)}
 						</div>
+
 						<div className="flex flex-col gap-2">
 							<Label htmlFor="name">Имя</Label>
 							<div>
@@ -69,19 +104,24 @@ export function SignUpForm() {
 									id="name"
 									type="text"
 									name="name"
+									value={formValues.name}
 									placeholder="Пётр"
 									required
 									disabled={isPending}
 									minLength={2}
 									maxLength={30}
+									aria-errormessage="name-error"
+									onBlur={handleBlur}
+									onChange={onChange}
 								/>
 							</div>
-							{state.errors.name && (
-								<p className="text-sm text-destructive" role="alert">
-									{state.errors.name[0]}
+							{fieldErrors.name && (
+								<p id="name-error" className="text-sm text-destructive">
+									{fieldErrors.name}
 								</p>
 							)}
 						</div>
+
 						<div className="flex flex-col gap-2">
 							<Label htmlFor="password">Пароль</Label>
 							<div className="relative">
@@ -89,11 +129,17 @@ export function SignUpForm() {
 									id="password"
 									type={showPassword ? 'text' : 'password'}
 									name="password"
+									value={formValues.password}
 									placeholder="••••••••"
 									required
 									disabled={isPending}
 									minLength={8}
 									maxLength={128}
+									pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,16}"
+									title="Пароль должен быть длиной от 8 до 128 символов, включать как минимум одну цифру, одну букву в нижнем и одну букву в верхнем регистре"
+									aria-errormessage="password-error"
+									onBlur={handleBlur}
+									onChange={onChange}
 								/>
 								<Button
 									type="button"
@@ -106,12 +152,13 @@ export function SignUpForm() {
 									{showPassword ? <EyeOffIcon /> : <EyeIcon />}
 								</Button>
 							</div>
-							{state.errors.password && (
-								<p className="text-sm text-destructive" role="alert">
-									{state.errors.password[0]}
+							{fieldErrors.password && (
+								<p id="password-error" className="text-sm text-destructive">
+									{fieldErrors.password}
 								</p>
 							)}
 						</div>
+
 						<div className="flex flex-col gap-2">
 							<Label htmlFor="confirm-password">Подтвердите пароль</Label>
 							<div>
@@ -119,22 +166,30 @@ export function SignUpForm() {
 									id="confirm-password"
 									type="password"
 									name="confirm-password"
+									value={formValues.confirmPassword}
 									placeholder="••••••••"
 									required
 									disabled={isPending}
 									minLength={8}
 									maxLength={128}
+									aria-errormessage="confirm-password-error"
+									onBlur={handleBlur}
+									onChange={onChange}
 								/>
 							</div>
-							{state.errors.confirmPassword && (
-								<p className="text-sm text-destructive" role="alert">
-									{state.errors.confirmPassword[0]}
+							{fieldErrors['confirm-password'] && (
+								<p
+									id="confirm-password-error"
+									className="text-sm text-destructive"
+								>
+									{fieldErrors['confirm-password']}
 								</p>
 							)}
 						</div>
-						{state.errors.general && (
+
+						{state.error && (
 							<p className="text-sm text-destructive" role="alert">
-								{state.errors.general}
+								{state.error}
 							</p>
 						)}
 					</div>
@@ -150,7 +205,7 @@ export function SignUpForm() {
 					{isPending ? 'Регистрация...' : 'Зарегистрироваться'}
 				</Button>
 				<Link
-					href="/auth/sign-in"
+					href="/auth/login"
 					className="text-sm text-primary-dark underline-offset-4 hover:underline"
 				>
 					Войти

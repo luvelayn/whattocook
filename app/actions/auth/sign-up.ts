@@ -14,43 +14,37 @@ export async function signUp(
 ): Promise<SignUpFormState> {
 	const supabase = await createClient();
 
-	const signUpData = {
-		email: (formData.get('email') as string).trim(),
-		password: formData.get('password') as string,
-		confirmPassword: formData.get('confirm-password') as string,
-		name: formData.get('name') as string,
-	};
+	const email = (formData.get('email') as string).trim();
+	const password = formData.get('password') as string;
+	const name = formData.get('name') as string;
 
-	try {
-		const { error } = await supabase.auth.signUp({
-			email: signUpData.email,
-			password: signUpData.password,
-			options: {
-				data: {
-					name: signUpData.name,
-				},
-				emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/`,
+	const { data, error } = await supabase.auth.signUp({
+		email,
+		password,
+		options: {
+			data: {
+				name: name,
 			},
-		});
+			emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/`,
+		},
+	});
 
-		if (error) {
-			let errorMessage = error.message;
-
-			if (error.code === 'email_exists') {
-				errorMessage = 'Пользователь с таким email уже зарегистрирован';
-			}
-
-			return {
-				error: errorMessage,
-			};
-		}
-
-		revalidatePath('/');
-		redirect('/auth/confirm');
-	} catch (error) {
-		console.error('SignUp error: ', error);
+	if (
+		data.user &&
+		(!data.user.identities || data.user.identities.length === 0)
+	) {
 		return {
-			error: 'Произошла непредвиденная ошибка',
+			error: 'Пользователь с таким email уже зарегистрирован',
 		};
 	}
+
+	if (error) {
+		console.error('Supabase signup error:', error);
+		return {
+			error: `Произошла ошибка во время регистрации. Попробуйте позже.`,
+		};
+	}
+
+	revalidatePath('/');
+	redirect('/auth/confirm');
 }

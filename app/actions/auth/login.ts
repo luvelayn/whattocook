@@ -3,25 +3,25 @@
 import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 
-export type SignInFormState = {
+export type LoginFormState = {
 	error: string | null;
 	redirect?: string;
 };
 
-export async function signIn(
-	prevState: SignInFormState | null,
+export async function login(
+	prevState: LoginFormState | null,
 	formData: FormData
-): Promise<SignInFormState> {
+): Promise<LoginFormState> {
 	const supabase = await createClient();
 
 	const redirect = (formData.get('redirect') as string) || '/';
-	const signInData = {
+	const loginData = {
 		email: (formData.get('email') as string).trim(),
 		password: formData.get('password') as string,
 	};
 
 	try {
-		const { error } = await supabase.auth.signInWithPassword(signInData);
+		const { error } = await supabase.auth.signInWithPassword(loginData);
 
 		if (error) {
 			let errorMessage = error.message;
@@ -42,7 +42,7 @@ export async function signIn(
 			redirect: redirect,
 		};
 	} catch (error) {
-		console.error('SignIn error: ', error);
+		console.error('Login error: ', error);
 		return {
 			error: 'Произошла непредвиденная ошибка',
 		};

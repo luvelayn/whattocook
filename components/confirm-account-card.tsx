@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { MailCheck } from 'lucide-react';
 
-export function ConfirmCard() {
+export function ConfirmAccountCard() {
 	return (
 		<Card className="w-full max-w-sm pt-8">
 			<CardHeader>

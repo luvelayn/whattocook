@@ -1,6 +1,6 @@
 'use client';
 
-import { signIn, SignInFormState } from '@/app/actions/auth/sign-in';
+import { login, LoginFormState } from '@/app/actions/auth/login';
 import { useActionState, useEffect, useState } from 'react';
 import {
 	Card,
@@ -16,16 +16,16 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
 
-const initialState: SignInFormState = {
+const initialState: LoginFormState = {
 	error: null,
 };
 
-export function SignInForm() {
+export function LoginForm() {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const redirectTo = searchParams.get('redirect') || '/';
 
-	const [state, formAction, isPending] = useActionState(signIn, initialState);
+	const [state, formAction, isPending] = useActionState(login, initialState);
 	const [showPassword, setShowPassword] = useState(false);
 
 	useEffect(() => {
@@ -35,7 +35,7 @@ export function SignInForm() {
 	}, [redirectTo, router, state]);
 
 	return (
-		<Card className="w-full max-w-sm gap-8">
+		<Card className="w-full max-w-sm gap-8 pt-8">
 			<CardHeader className="grid-rows-[auto]">
 				<CardTitle className="text-center font-jost text-2xl font-medium">
 					Вход
@@ -43,7 +43,7 @@ export function SignInForm() {
 			</CardHeader>
 			<CardContent>
 				<form
-					id="sign-in-form"
+					id="login-form"
 					action={formAction}
 					onKeyDown={(e) => {
 						if (e.key === 'Enter' && !isPending) {
@@ -113,7 +113,7 @@ export function SignInForm() {
 			<CardFooter className="flex flex-col gap-3">
 				<Button
 					type="submit"
-					form="sign-in-form"
+					form="login-form"
 					className="w-full"
 					disabled={isPending}
 				>

@@ -2,17 +2,10 @@
 
 import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
-import { formatErrors, validateSignUp } from '@/lib/utils';
 import { redirect } from 'next/navigation';
 
 export type SignUpFormState = {
-	errors: {
-		email?: string[];
-		password?: string[];
-		confirmPassword?: string[];
-		name?: string[];
-		general?: string;
-	};
+	error: string;
 };
 
 export async function signUp(
@@ -27,14 +20,6 @@ export async function signUp(
 		confirmPassword: formData.get('confirm-password') as string,
 		name: formData.get('name') as string,
 	};
-
-	const errors = validateSignUp(signUpData);
-
-	if (errors.length !== 0) {
-		return {
-			errors: formatErrors(errors),
-		};
-	}
 
 	try {
 		const { error } = await supabase.auth.signUp({
@@ -56,7 +41,7 @@ export async function signUp(
 			}
 
 			return {
-				errors: { general: errorMessage },
+				error: errorMessage,
 			};
 		}
 
@@ -65,7 +50,7 @@ export async function signUp(
 	} catch (error) {
 		console.error('SignUp error: ', error);
 		return {
-			errors: { general: 'Произошла непредвиденная ошибка' },
+			error: 'Произошла непредвиденная ошибка',
 		};
 	}
 }

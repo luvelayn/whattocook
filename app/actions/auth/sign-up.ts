@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 import { formatErrors, validateSignUp } from '@/lib/utils';
+import { redirect } from 'next/navigation';
 
 export type SignUpFormState = {
 	errors: {
@@ -23,13 +24,13 @@ export async function signUp(
 	const signUpData = {
 		email: (formData.get('email') as string).trim(),
 		password: formData.get('password') as string,
-		confirmPassword: formData.get('confirmPassword') as string,
+		confirmPassword: formData.get('confirm-password') as string,
 		name: formData.get('name') as string,
 	};
 
 	const errors = validateSignUp(signUpData);
 
-	if (errors) {
+	if (errors.length !== 0) {
 		return {
 			errors: formatErrors(errors),
 		};
@@ -60,10 +61,7 @@ export async function signUp(
 		}
 
 		revalidatePath('/');
-
-		return {
-			errors: {},
-		};
+		redirect('/auth/confirm');
 	} catch (error) {
 		console.error('SignUp error: ', error);
 		return {

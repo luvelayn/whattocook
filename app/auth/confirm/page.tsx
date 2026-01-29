@@ -1,13 +1,9 @@
-import { SignInForm } from '@/components/sign-in-form';
-import { Suspense } from 'react';
-import { Spinner } from '@/components/ui/spinner';
+import { ConfirmCard } from '@/components/confirm-card';
 
-export default async function SignInPage() {
+export default async function ConfirmPage() {
 	return (
 		<div className="flex min-h-screen w-full items-center justify-center">
-			<Suspense fallback={<Spinner />}>
-				<SignInForm />
-			</Suspense>
+			<ConfirmCard />
 		</div>
 	);
 }

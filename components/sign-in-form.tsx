@@ -72,9 +72,8 @@ export function SignInForm() {
 						<div className="flex flex-col gap-2">
 							<div className="flex items-center justify-between">
 								<Label htmlFor="password">Пароль</Label>
-								{/* TODO добавить ссылку на страницу восстановления пароля */}
 								<Link
-									href="/"
+									href="/auth/reset-password"
 									className="text-sm underline-offset-4 hover:underline"
 								>
 									Забыли пароль?

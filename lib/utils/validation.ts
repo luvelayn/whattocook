@@ -1,4 +1,14 @@
-import { SignUpFormInput, ValidationError } from '@/lib/utils/validation/types';
+export type ValidationError = {
+	field: string;
+	message: string;
+};
+
+export interface SignUpFormInput {
+	email: string;
+	password: string;
+	confirmPassword: string;
+	name: string;
+}
 
 export function validateSignUp(data: SignUpFormInput): ValidationError[] {
 	const errors: ValidationError[] = [];
@@ -114,4 +124,17 @@ function validatePassword(password: string): ValidationError[] {
 function isValidEmail(email: string): boolean {
 	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 	return emailRegex.test(email);
+}
+
+export function formatErrors(errors: ValidationError[]) {
+	const formattedErrors: Record<string, string[]> = {};
+
+	errors.forEach((error) => {
+		if (!formattedErrors[error.field]) {
+			formattedErrors[error.field] = [];
+		}
+		formattedErrors[error.field].push(error.message);
+	});
+
+	return formattedErrors;
 }

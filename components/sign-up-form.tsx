@@ -81,7 +81,7 @@ export function SignUpForm() {
 			<CardContent>
 				<form
 					id="sign-up-form"
-					onSubmit={(e) => handleSubmit(e)}
+					onSubmit={handleSubmit}
 					action={formAction}
 					onKeyDown={(e) => {
 						if (e.key === 'Enter' && !isPending) {

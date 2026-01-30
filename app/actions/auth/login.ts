@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 
 export type LoginFormState = {
-	error: string | null;
+	error: string;
 	redirect?: string;
 };
 
@@ -38,7 +38,7 @@ export async function login(
 		revalidatePath('/');
 
 		return {
-			error: null,
+			error: '',
 			redirect: redirect,
 		};
 	} catch (error) {

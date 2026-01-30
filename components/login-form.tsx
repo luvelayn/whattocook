@@ -15,9 +15,11 @@ import Link from 'next/link';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
+import { useFormValidation } from '@/hooks/useFormValidation';
+import { cn } from '@/lib/utils';
 
 const initialState: LoginFormState = {
-	error: null,
+	error: '',
 };
 
 export function LoginForm() {
@@ -27,6 +29,8 @@ export function LoginForm() {
 
 	const [state, formAction, isPending] = useActionState(login, initialState);
 	const [showPassword, setShowPassword] = useState(false);
+	const { fieldErrors, handleBlur, handleChange, handleSubmit } =
+		useFormValidation();
 
 	useEffect(() => {
 		if (!state.error && state.redirect) {
@@ -44,12 +48,14 @@ export function LoginForm() {
 			<CardContent>
 				<form
 					id="login-form"
+					onSubmit={handleSubmit}
 					action={formAction}
 					onKeyDown={(e) => {
 						if (e.key === 'Enter' && !isPending) {
 							e.currentTarget.requestSubmit();
 						}
 					}}
+					noValidate
 				>
 					<Input type="hidden" name="redirect" value={redirectTo} />
 					<div className="flex flex-col gap-4">
@@ -57,6 +63,9 @@ export function LoginForm() {
 							<Label htmlFor="email">Email</Label>
 							<div>
 								<Input
+									className={cn({
+										'border-destructive': fieldErrors.email,
+									})}
 									id="email"
 									type="email"
 									name="email"
@@ -66,9 +75,18 @@ export function LoginForm() {
 									disabled={isPending}
 									autoFocus
 									maxLength={254}
+									aria-errormessage="email-error"
+									onBlur={handleBlur}
+									onChange={handleChange}
 								/>
 							</div>
+							{fieldErrors.email && (
+								<p id="email-error" className="text-sm text-destructive">
+									{fieldErrors.email}
+								</p>
+							)}
 						</div>
+
 						<div className="flex flex-col gap-2">
 							<div className="flex items-center justify-between">
 								<Label htmlFor="password">Пароль</Label>
@@ -81,6 +99,9 @@ export function LoginForm() {
 							</div>
 							<div className="relative">
 								<Input
+									className={cn({
+										'border-destructive': fieldErrors.password,
+									})}
 									id="password"
 									type={showPassword ? 'text' : 'password'}
 									name="password"
@@ -89,6 +110,9 @@ export function LoginForm() {
 									disabled={isPending}
 									minLength={8}
 									maxLength={128}
+									aria-errormessage="password-error"
+									onBlur={handleBlur}
+									onChange={handleChange}
 								/>
 								<Button
 									type="button"
@@ -101,6 +125,11 @@ export function LoginForm() {
 									{showPassword ? <EyeOffIcon /> : <EyeIcon />}
 								</Button>
 							</div>
+							{fieldErrors.password && (
+								<p id="password-error" className="text-sm text-destructive">
+									{fieldErrors.password}
+								</p>
+							)}
 						</div>
 						{state.error && (
 							<p className="text-sm text-destructive" role="alert">

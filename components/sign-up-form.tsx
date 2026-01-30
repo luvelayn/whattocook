@@ -1,7 +1,7 @@
 'use client';
 
 import { signUp, SignUpFormState } from '@/app/actions/auth/sign-up';
-import { ChangeEvent, FormEvent, useActionState, useState } from 'react';
+import { ChangeEvent, FocusEvent, useActionState, useState } from 'react';
 import { useFormValidation } from '@/hooks/useFormValidation';
 import {
 	Card,
@@ -15,6 +15,7 @@ import Link from 'next/link';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 const initialState: SignUpFormState = {
 	error: '',
@@ -23,30 +24,51 @@ const initialState: SignUpFormState = {
 export function SignUpForm() {
 	const [state, formAction, isPending] = useActionState(signUp, initialState);
 	const [showPassword, setShowPassword] = useState(false);
-	const { fieldErrors, handleBlur, handleChange, handleSubmit } =
-		useFormValidation();
-
-	const [formValues, setFormValues] = useState({
-		email: '',
-		name: '',
-		password: '',
-		confirmPassword: '',
+	const {
+		fieldErrors,
+		validateField,
+		clearFieldError,
+		handleBlur,
+		handleChange,
+		handleSubmit,
+	} = useFormValidation({
+		'confirm-password': {
+			validate: (value, form) => {
+				const passwordField = form.elements.namedItem(
+					'password'
+				) as HTMLInputElement;
+				if (passwordField && value !== passwordField.value) {
+					return 'Пароли не совпадают';
+				}
+				return null;
+			},
+		},
 	});
 
-	const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-		const { name, value } = e.target;
+	const onBlur = (event: FocusEvent<HTMLInputElement>) => {
+		const { target } = event;
 
-		// Обновляем локальное состояние
-		setFormValues((prev) => ({
-			...prev,
-			[name === 'confirm-password' ? 'confirmPassword' : name]: value,
-		}));
+		if (target.name === 'password' && target.form) {
+			const confirmPasswordField = target.form.elements.namedItem(
+				'confirm-password'
+			) as HTMLInputElement;
 
-		handleChange(e);
+			if (confirmPasswordField && confirmPasswordField.value) {
+				validateField(confirmPasswordField);
+			}
+		}
+
+		handleBlur(event);
 	};
 
-	const onSubmit = (event: FormEvent<HTMLFormElement>) => {
-		handleSubmit(event, () => {});
+	const onChange = (event: ChangeEvent<HTMLInputElement>) => {
+		const { target } = event;
+
+		if (target.name === 'password' && fieldErrors['confirm-password']) {
+			clearFieldError('confirm-password');
+		}
+
+		handleChange(event);
 	};
 
 	return (
@@ -59,7 +81,7 @@ export function SignUpForm() {
 			<CardContent>
 				<form
 					id="sign-up-form"
-					onSubmit={onSubmit}
+					onSubmit={(e) => handleSubmit(e)}
 					action={formAction}
 					onKeyDown={(e) => {
 						if (e.key === 'Enter' && !isPending) {
@@ -73,10 +95,10 @@ export function SignUpForm() {
 							<Label htmlFor="email">Email</Label>
 							<div>
 								<Input
+									className={cn({ 'border-destructive': fieldErrors.email })}
 									id="email"
 									type="email"
 									name="email"
-									value={formValues.email}
 									placeholder="example@mail.com"
 									autoComplete="email"
 									required
@@ -86,7 +108,7 @@ export function SignUpForm() {
 									pattern="[^\s@]+@[^\s@]+\.[^\s@]+"
 									title="Введите корректный email адрес"
 									aria-errormessage="email-error"
-									onBlur={handleBlur}
+									onBlur={onBlur}
 									onChange={onChange}
 								/>
 							</div>
@@ -101,17 +123,17 @@ export function SignUpForm() {
 							<Label htmlFor="name">Имя</Label>
 							<div>
 								<Input
+									className={cn({ 'border-destructive': fieldErrors.name })}
 									id="name"
 									type="text"
 									name="name"
-									value={formValues.name}
 									placeholder="Пётр"
 									required
 									disabled={isPending}
 									minLength={2}
 									maxLength={30}
 									aria-errormessage="name-error"
-									onBlur={handleBlur}
+									onBlur={onBlur}
 									onChange={onChange}
 								/>
 							</div>
@@ -126,19 +148,19 @@ export function SignUpForm() {
 							<Label htmlFor="password">Пароль</Label>
 							<div className="relative">
 								<Input
+									className={cn({ 'border-destructive': fieldErrors.password })}
 									id="password"
 									type={showPassword ? 'text' : 'password'}
 									name="password"
-									value={formValues.password}
 									placeholder="••••••••"
 									required
 									disabled={isPending}
 									minLength={8}
 									maxLength={128}
-									pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,16}"
+									pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,128}"
 									title="Пароль должен быть длиной от 8 до 128 символов, включать как минимум одну цифру, одну букву в нижнем и одну букву в верхнем регистре"
 									aria-errormessage="password-error"
-									onBlur={handleBlur}
+									onBlur={onBlur}
 									onChange={onChange}
 								/>
 								<Button
@@ -163,17 +185,17 @@ export function SignUpForm() {
 							<Label htmlFor="confirm-password">Подтвердите пароль</Label>
 							<div>
 								<Input
+									className={cn({
+										'border-destructive': fieldErrors['confirm-password'],
+									})}
 									id="confirm-password"
 									type="password"
 									name="confirm-password"
-									value={formValues.confirmPassword}
 									placeholder="••••••••"
 									required
 									disabled={isPending}
-									minLength={8}
-									maxLength={128}
 									aria-errormessage="confirm-password-error"
-									onBlur={handleBlur}
+									onBlur={onBlur}
 									onChange={onChange}
 								/>
 							</div>

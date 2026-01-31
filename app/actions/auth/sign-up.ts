@@ -1,6 +1,7 @@
 'use server';
 
 import { createClient } from '@/lib/supabase/server';
+import { createServiceClient } from '@/lib/supabase/service';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
@@ -17,6 +18,7 @@ export async function signUp(
 	const email = (formData.get('email') as string).trim();
 	const password = formData.get('password') as string;
 	const name = formData.get('name') as string;
+	const avatarFile = formData.get('avatar') as File | null;
 
 	const { data, error } = await supabase.auth.signUp({
 		email,
@@ -43,6 +45,37 @@ export async function signUp(
 		return {
 			error: `Произошла ошибка во время регистрации. Попробуйте позже.`,
 		};
+	}
+
+	if (avatarFile && avatarFile.size > 0 && data.user) {
+		const supabaseAdmin = createServiceClient();
+
+		const fileExt = avatarFile.name.split('.').pop();
+		const fileName = `${data.user.id}-${Date.now()}.${fileExt}`;
+
+		const { error: uploadError } = await supabaseAdmin.storage
+			.from('avatars')
+			.upload(fileName, avatarFile, {
+				cacheControl: '3600',
+				upsert: false,
+			});
+
+		if (uploadError) {
+			console.error('Avatar upload error:', uploadError);
+		} else {
+			const {
+				data: { publicUrl },
+			} = supabaseAdmin.storage.from('avatars').getPublicUrl(fileName);
+
+			const { error: updateError } = await supabaseAdmin
+				.from('profiles')
+				.update({ avatar_url: publicUrl })
+				.eq('id', data.user.id);
+
+			if (updateError) {
+				console.error('Profile update error:', updateError);
+			}
+		}
 	}
 
 	revalidatePath('/');

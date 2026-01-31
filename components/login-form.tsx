@@ -9,14 +9,23 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
 import { useFormValidation } from '@/hooks/useFormValidation';
-import { cn } from '@/lib/utils';
+import {
+	Field,
+	FieldError,
+	FieldGroup,
+	FieldLabel,
+} from '@/components/ui/field';
+import {
+	InputGroup,
+	InputGroupAddon,
+	InputGroupInput,
+} from '@/components/ui/input-group';
 
 const initialState: LoginFormState = {
 	error: '',
@@ -39,7 +48,7 @@ export function LoginForm() {
 	}, [redirectTo, router, state]);
 
 	return (
-		<Card className="w-full max-w-sm gap-8 pt-8">
+		<Card className="w-full max-w-sm">
 			<CardHeader className="grid-rows-[auto]">
 				<CardTitle className="text-center font-jost text-2xl font-medium">
 					Вход
@@ -58,40 +67,31 @@ export function LoginForm() {
 					noValidate
 				>
 					<Input type="hidden" name="redirect" value={redirectTo} />
-					<div className="flex flex-col gap-4">
-						<div className="flex flex-col gap-2">
-							<Label htmlFor="email">Email</Label>
-							<div>
-								<Input
-									className={cn({
-										'border-destructive': fieldErrors.email,
-									})}
-									id="email"
-									type="email"
-									name="email"
-									placeholder="example@mail.com"
-									autoComplete="email"
-									required
-									disabled={isPending}
-									autoFocus
-									maxLength={254}
-									pattern="[^\s@]+@[^\s@]+\.[^\s@]+"
-									title="Введите корректный email адрес"
-									aria-errormessage="email-error"
-									onBlur={handleBlur}
-									onFocus={handleFocus}
-								/>
-							</div>
-							{fieldErrors.email && (
-								<p id="email-error" className="text-sm text-destructive">
-									{fieldErrors.email}
-								</p>
-							)}
-						</div>
+					<FieldGroup className="gap-4">
+						<Field className="gap-2">
+							<FieldLabel htmlFor="email">Email</FieldLabel>
+							<Input
+								id="email"
+								type="email"
+								name="email"
+								placeholder="example@mail.com"
+								autoComplete="email"
+								required
+								disabled={isPending}
+								autoFocus
+								maxLength={254}
+								pattern="[^\s@]+@[^\s@]+\.[^\s@]+"
+								title="Введите корректный email адрес"
+								aria-errormessage="email-error"
+								onBlur={handleBlur}
+								onFocus={handleFocus}
+							/>
+							<FieldError>{fieldErrors.email}</FieldError>
+						</Field>
 
-						<div className="flex flex-col gap-2">
+						<Field className="gap-2">
 							<div className="flex items-center justify-between">
-								<Label htmlFor="password">Пароль</Label>
+								<FieldLabel htmlFor="password">Пароль</FieldLabel>
 								<Link
 									href="/auth/reset-password"
 									className="text-sm underline-offset-4 hover:underline"
@@ -99,11 +99,8 @@ export function LoginForm() {
 									Забыли пароль?
 								</Link>
 							</div>
-							<div className="relative">
-								<Input
-									className={cn({
-										'border-destructive': fieldErrors.password,
-									})}
+							<InputGroup>
+								<InputGroupInput
 									id="password"
 									type={showPassword ? 'text' : 'password'}
 									name="password"
@@ -116,29 +113,28 @@ export function LoginForm() {
 									onBlur={handleBlur}
 									onFocus={handleFocus}
 								/>
-								<Button
-									type="button"
-									variant="ghost"
-									size="sm"
-									className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-									onClick={() => setShowPassword(!showPassword)}
-									disabled={isPending}
-								>
-									{showPassword ? <EyeOffIcon /> : <EyeIcon />}
-								</Button>
-							</div>
-							{fieldErrors.password && (
-								<p id="password-error" className="text-sm text-destructive">
-									{fieldErrors.password}
-								</p>
-							)}
-						</div>
+								<InputGroupAddon align="inline-end">
+									<Button
+										type="button"
+										variant="ghost"
+										size="sm"
+										className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+										onClick={() => setShowPassword(!showPassword)}
+										disabled={isPending}
+									>
+										{showPassword ? <EyeOffIcon /> : <EyeIcon />}
+									</Button>
+								</InputGroupAddon>
+							</InputGroup>
+							<FieldError>{fieldErrors.password}</FieldError>
+						</Field>
+
 						{state.error && (
 							<p className="text-sm text-destructive" role="alert">
 								{state.error}
 							</p>
 						)}
-					</div>
+					</FieldGroup>
 				</form>
 			</CardContent>
 			<CardFooter className="flex flex-col gap-3">

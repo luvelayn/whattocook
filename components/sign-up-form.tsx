@@ -16,13 +16,23 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
 import Link from 'next/link';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { EyeIcon, EyeOffIcon, Plus, User, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
+import {
+	Field,
+	FieldError,
+	FieldGroup,
+	FieldLabel,
+} from '@/components/ui/field';
+import {
+	InputGroup,
+	InputGroupAddon,
+	InputGroupInput,
+} from '@/components/ui/input-group';
 
 const initialState: SignUpFormState = {
 	error: '',
@@ -121,7 +131,7 @@ export function SignUpForm() {
 	};
 
 	return (
-		<Card className="w-full max-w-sm gap-8 pt-8">
+		<Card className="w-full max-w-sm">
 			<CardHeader className="grid-rows-[auto]">
 				<CardTitle className="text-center font-jost text-2xl font-medium">
 					Регистрация
@@ -139,8 +149,11 @@ export function SignUpForm() {
 					}}
 					noValidate
 				>
-					<div className="flex flex-col gap-4">
-						<div className="flex justify-center">
+					<FieldGroup className="gap-4">
+						<Field
+							orientation={'horizontal'}
+							className="flex flex-col items-center"
+						>
 							<Input
 								ref={fileInputRef}
 								id="avatar"
@@ -152,7 +165,7 @@ export function SignUpForm() {
 								className="hidden"
 							/>
 							<div className="relative">
-								<Label
+								<FieldLabel
 									htmlFor="avatar"
 									className={cn(
 										'group relative flex h-20 w-20 cursor-pointer items-center justify-center rounded-full border-2 border-dashed border-muted-foreground/30 bg-muted/30 transition-all hover:border-primary hover:bg-muted/50',
@@ -178,89 +191,74 @@ export function SignUpForm() {
 										<>
 											<User className="h-9 w-9 text-muted-foreground" />
 											<Button
+												type="button"
 												size="icon"
+												onClick={() => {
+													fileInputRef.current?.click();
+												}}
 												className="absolute bottom-0 right-0 h-5 w-5 rounded-full bg-primary"
 											>
 												<Plus className="h-3 w-3 text-primary-foreground" />
 											</Button>
 										</>
 									)}
-								</Label>
+								</FieldLabel>
 								{avatarPreview && (
 									<Button
+										type="button"
 										size="icon"
 										onClick={handleRemoveAvatar}
 										className="absolute right-0 top-0 h-5 w-5 rounded-full bg-destructive/90 text-destructive-foreground hover:bg-destructive"
-										aria-label="Удалить аватар"
 									>
 										<X className="h-3 w-3" />
 									</Button>
 								)}
 							</div>
+							{avatarError && <FieldError>{avatarError}</FieldError>}
+						</Field>
 
-							{avatarError && (
-								<p className="text-sm text-destructive">{avatarError}</p>
-							)}
-						</div>
+						<Field className="gap-2">
+							<FieldLabel htmlFor="email">Email</FieldLabel>
+							<Input
+								id="email"
+								type="email"
+								name="email"
+								placeholder="example@mail.com"
+								autoComplete="email"
+								required
+								disabled={isPending}
+								maxLength={254}
+								pattern="[^\s@]+@[^\s@]+\.[^\s@]+"
+								title="Введите корректный email адрес"
+								aria-errormessage="email-error"
+								onBlur={onBlur}
+								onFocus={onFocus}
+							/>
+							<FieldError>{fieldErrors.email}</FieldError>
+						</Field>
 
-						<div className="flex flex-col gap-2">
-							<Label htmlFor="email">Email</Label>
-							<div>
-								<Input
-									className={cn({ 'border-destructive': fieldErrors.email })}
-									id="email"
-									type="email"
-									name="email"
-									placeholder="example@mail.com"
-									autoComplete="email"
-									required
-									disabled={isPending}
-									autoFocus
-									maxLength={254}
-									pattern="[^\s@]+@[^\s@]+\.[^\s@]+"
-									title="Введите корректный email адрес"
-									aria-errormessage="email-error"
-									onBlur={onBlur}
-									onFocus={onFocus}
-								/>
-							</div>
-							{fieldErrors.email && (
-								<p id="email-error" className="text-sm text-destructive">
-									{fieldErrors.email}
-								</p>
-							)}
-						</div>
+						<Field className="gap-2">
+							<FieldLabel htmlFor="name">Имя</FieldLabel>
+							<Input
+								id="name"
+								type="text"
+								name="name"
+								placeholder="Пётр"
+								required
+								disabled={isPending}
+								minLength={2}
+								maxLength={30}
+								aria-errormessage="name-error"
+								onBlur={onBlur}
+								onFocus={onFocus}
+							/>
+							<FieldError>{fieldErrors.name}</FieldError>
+						</Field>
 
-						<div className="flex flex-col gap-2">
-							<Label htmlFor="name">Имя</Label>
-							<div>
-								<Input
-									className={cn({ 'border-destructive': fieldErrors.name })}
-									id="name"
-									type="text"
-									name="name"
-									placeholder="Пётр"
-									required
-									disabled={isPending}
-									minLength={2}
-									maxLength={30}
-									aria-errormessage="name-error"
-									onBlur={onBlur}
-									onFocus={onFocus}
-								/>
-							</div>
-							{fieldErrors.name && (
-								<p id="name-error" className="text-sm text-destructive">
-									{fieldErrors.name}
-								</p>
-							)}
-						</div>
-
-						<div className="flex flex-col gap-2">
-							<Label htmlFor="password">Пароль</Label>
-							<div className="relative">
-								<Input
-									className={cn({ 'border-destructive': fieldErrors.password })}
+						<Field className="gap-2">
+							<FieldLabel htmlFor="password">Пароль</FieldLabel>
+							<InputGroup>
+								<InputGroupInput
 									id="password"
 									type={showPassword ? 'text' : 'password'}
 									name="password"
@@ -275,58 +273,46 @@ export function SignUpForm() {
 									onBlur={onBlur}
 									onFocus={onFocus}
 								/>
-								<Button
-									type="button"
-									variant="ghost"
-									size="sm"
-									className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-									onClick={() => setShowPassword(!showPassword)}
-									disabled={isPending}
-								>
-									{showPassword ? <EyeOffIcon /> : <EyeIcon />}
-								</Button>
-							</div>
-							{fieldErrors.password && (
-								<p id="password-error" className="text-sm text-destructive">
-									{fieldErrors.password}
-								</p>
-							)}
-						</div>
+								<InputGroupAddon align="inline-end">
+									<Button
+										type="button"
+										variant="ghost"
+										size="sm"
+										className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+										onClick={() => setShowPassword(!showPassword)}
+										disabled={isPending}
+									>
+										{showPassword ? <EyeOffIcon /> : <EyeIcon />}
+									</Button>
+								</InputGroupAddon>
+							</InputGroup>
+							<FieldError>{fieldErrors.password}</FieldError>
+						</Field>
 
-						<div className="flex flex-col gap-2">
-							<Label htmlFor="confirm-password">Подтвердите пароль</Label>
-							<div>
-								<Input
-									className={cn({
-										'border-destructive': fieldErrors['confirm-password'],
-									})}
-									id="confirm-password"
-									type="password"
-									name="confirm-password"
-									placeholder="••••••••"
-									required
-									disabled={isPending}
-									aria-errormessage="confirm-password-error"
-									onBlur={onBlur}
-									onFocus={onFocus}
-								/>
-							</div>
-							{fieldErrors['confirm-password'] && (
-								<p
-									id="confirm-password-error"
-									className="text-sm text-destructive"
-								>
-									{fieldErrors['confirm-password']}
-								</p>
-							)}
-						</div>
+						<Field className="gap-2">
+							<FieldLabel htmlFor="confirm-password">
+								Подтвердите пароль
+							</FieldLabel>
+							<Input
+								id="confirm-password"
+								type="password"
+								name="confirm-password"
+								placeholder="••••••••"
+								required
+								disabled={isPending}
+								aria-errormessage="confirm-password-error"
+								onBlur={onBlur}
+								onFocus={onFocus}
+							/>
+							<FieldError>{fieldErrors['confirm-password']}</FieldError>
+						</Field>
 
 						{state.error && (
 							<p className="text-sm text-destructive" role="alert">
 								{state.error}
 							</p>
 						)}
-					</div>
+					</FieldGroup>
 				</form>
 			</CardContent>
 			<CardFooter className="flex flex-col gap-3">

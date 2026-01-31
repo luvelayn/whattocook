@@ -1,4 +1,10 @@
-import { FocusEvent, FormEvent, useCallback, useState } from 'react';
+import {
+	ChangeEvent,
+	FocusEvent,
+	FormEvent,
+	useCallback,
+	useState,
+} from 'react';
 
 type ValidationRule =
 	| 'valueMissing'
@@ -88,7 +94,7 @@ export function useFormValidation(customRules: CustomValidationRules = {}) {
 		validateField(event.target);
 	};
 
-	const handleFocus = (event: FocusEvent<HTMLInputElement>) => {
+	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const { target } = event;
 
 		target.setAttribute('aria-invalid', String(false));
@@ -127,7 +133,7 @@ export function useFormValidation(customRules: CustomValidationRules = {}) {
 		validateField,
 		clearFieldError,
 		handleBlur,
-		handleFocus,
+		handleChange,
 		handleSubmit,
 	};
 }

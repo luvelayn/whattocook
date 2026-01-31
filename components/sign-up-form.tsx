@@ -58,7 +58,7 @@ export function SignUpForm() {
 		validateField,
 		clearFieldError,
 		handleBlur,
-		handleFocus,
+		handleChange,
 		handleSubmit,
 	} = useFormValidation({
 		'confirm-password': {
@@ -90,14 +90,14 @@ export function SignUpForm() {
 		handleBlur(event);
 	};
 
-	const onFocus = (event: FocusEvent<HTMLInputElement>) => {
+	const onChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const { target } = event;
 
 		if (target.name === 'password' && fieldErrors['confirm-password']) {
 			clearFieldError('confirm-password');
 		}
 
-		handleFocus(event);
+		handleChange(event);
 	};
 
 	const handleAvatarChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -232,7 +232,7 @@ export function SignUpForm() {
 								title="Введите корректный email адрес"
 								aria-errormessage="email-error"
 								onBlur={onBlur}
-								onFocus={onFocus}
+								onChange={onChange}
 							/>
 							<FieldError>{fieldErrors.email}</FieldError>
 						</Field>
@@ -250,7 +250,7 @@ export function SignUpForm() {
 								maxLength={30}
 								aria-errormessage="name-error"
 								onBlur={onBlur}
-								onFocus={onFocus}
+								onChange={onChange}
 							/>
 							<FieldError>{fieldErrors.name}</FieldError>
 						</Field>
@@ -271,7 +271,7 @@ export function SignUpForm() {
 									title="Пароль должен содержать минимум 8 символов, включая цифру, строчную и заглавную букву"
 									aria-errormessage="password-error"
 									onBlur={onBlur}
-									onFocus={onFocus}
+									onChange={onChange}
 								/>
 								<InputGroupAddon align="inline-end">
 									<Button
@@ -302,7 +302,7 @@ export function SignUpForm() {
 								disabled={isPending}
 								aria-errormessage="confirm-password-error"
 								onBlur={onBlur}
-								onFocus={onFocus}
+								onChange={onChange}
 							/>
 							<FieldError>{fieldErrors['confirm-password']}</FieldError>
 						</Field>

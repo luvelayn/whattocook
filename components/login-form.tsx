@@ -38,7 +38,7 @@ export function LoginForm() {
 
 	const [state, formAction, isPending] = useActionState(login, initialState);
 	const [showPassword, setShowPassword] = useState(false);
-	const { fieldErrors, handleBlur, handleFocus, handleSubmit } =
+	const { fieldErrors, handleBlur, handleChange, handleSubmit } =
 		useFormValidation();
 
 	useEffect(() => {
@@ -84,7 +84,7 @@ export function LoginForm() {
 								title="Введите корректный email адрес"
 								aria-errormessage="email-error"
 								onBlur={handleBlur}
-								onFocus={handleFocus}
+								onChange={handleChange}
 							/>
 							<FieldError>{fieldErrors.email}</FieldError>
 						</Field>
@@ -111,7 +111,7 @@ export function LoginForm() {
 									maxLength={128}
 									aria-errormessage="password-error"
 									onBlur={handleBlur}
-									onFocus={handleFocus}
+									onChange={handleChange}
 								/>
 								<InputGroupAddon align="inline-end">
 									<Button

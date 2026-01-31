@@ -40,7 +40,6 @@ const eslintConfig = [
 			'prefer-const': 'warn',
 			'no-var': 'error',
 			'no-eval': 'error',
-			eqeqeq: ['error', 'always'],
 			'no-param-reassign': ['warn', { props: false }],
 			'react/jsx-key': [
 				'error',

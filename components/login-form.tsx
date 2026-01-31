@@ -48,7 +48,7 @@ export function LoginForm() {
 	}, [redirectTo, router, state]);
 
 	return (
-		<Card className="w-full max-w-sm">
+		<Card>
 			<CardHeader className="grid-rows-[auto]">
 				<CardTitle className="text-center font-jost text-2xl font-medium">
 					Вход

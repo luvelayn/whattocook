@@ -3,7 +3,7 @@ import { MailCheck } from 'lucide-react';
 
 export function ConfirmAccountCard() {
 	return (
-		<Card className="w-full max-w-sm pt-8">
+		<Card className="pt-8">
 			<CardHeader>
 				<div className="flex justify-center">
 					<MailCheck className="h-14 w-14 text-primary" />

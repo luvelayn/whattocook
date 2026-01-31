@@ -1,7 +1,13 @@
 'use client';
 
 import { signUp, SignUpFormState } from '@/app/actions/auth/sign-up';
-import { FocusEvent, useActionState, useState } from 'react';
+import {
+	ChangeEvent,
+	FocusEvent,
+	useActionState,
+	useRef,
+	useState,
+} from 'react';
 import { useFormValidation } from '@/hooks/useFormValidation';
 import {
 	Card,
@@ -14,16 +20,29 @@ import { Label } from '@/components/ui/label';
 import Link from 'next/link';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { EyeIcon, EyeOffIcon } from 'lucide-react';
+import { EyeIcon, EyeOffIcon, Plus, User, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 const initialState: SignUpFormState = {
 	error: '',
 };
 
+const MAX_FILE_SIZE = 2 * 1024 * 1024;
+const ACCEPTED_IMAGE_TYPES = [
+	'image/jpeg',
+	'image/jpg',
+	'image/png',
+	'image/webp',
+];
+
 export function SignUpForm() {
 	const [state, formAction, isPending] = useActionState(signUp, initialState);
 	const [showPassword, setShowPassword] = useState(false);
+	const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+	const [avatarError, setAvatarError] = useState<string>('');
+	const fileInputRef = useRef<HTMLInputElement>(null);
+
 	const {
 		fieldErrors,
 		validateField,
@@ -71,6 +90,36 @@ export function SignUpForm() {
 		handleFocus(event);
 	};
 
+	const handleAvatarChange = (event: ChangeEvent<HTMLInputElement>) => {
+		const file = event.target.files?.[0];
+		setAvatarError('');
+
+		if (!file) return;
+
+		if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
+			setAvatarError('Поддерживаются только JPG, PNG и WebP форматы');
+			return;
+		}
+
+		if (file.size > MAX_FILE_SIZE) {
+			setAvatarError('Размер файла не должен превышать 2MB');
+			return;
+		}
+
+		const reader = new FileReader();
+		reader.onloadend = () => {
+			setAvatarPreview(reader.result as string);
+		};
+		reader.readAsDataURL(file);
+	};
+
+	const handleRemoveAvatar = () => {
+		setAvatarPreview(null);
+		if (fileInputRef.current) {
+			fileInputRef.current.value = '';
+		}
+	};
+
 	return (
 		<Card className="w-full max-w-sm gap-8 pt-8">
 			<CardHeader className="grid-rows-[auto]">
@@ -91,6 +140,69 @@ export function SignUpForm() {
 					noValidate
 				>
 					<div className="flex flex-col gap-4">
+						<div className="flex justify-center">
+							<Input
+								ref={fileInputRef}
+								id="avatar"
+								type="file"
+								name="avatar"
+								accept="image/jpeg,image/jpg,image/png,image/webp"
+								onChange={handleAvatarChange}
+								disabled={isPending}
+								className="hidden"
+							/>
+							<div className="relative">
+								<Label
+									htmlFor="avatar"
+									className={cn(
+										'group relative flex h-20 w-20 cursor-pointer items-center justify-center rounded-full border-2 border-dashed border-muted-foreground/30 bg-muted/30 transition-all hover:border-primary hover:bg-muted/50',
+										avatarPreview &&
+											'border-solid border-border bg-transparent',
+										isPending && 'cursor-not-allowed opacity-50'
+									)}
+									title="Загрузить аватар"
+								>
+									{avatarPreview ? (
+										<>
+											<Image
+												src={avatarPreview}
+												alt="Аватар"
+												fill
+												className="rounded-full object-cover"
+											/>
+											<div className="absolute inset-0 flex items-center justify-center rounded-full bg-black/60 opacity-0 transition-opacity group-hover:opacity-100">
+												<Plus className="h-8 w-8 text-white" />
+											</div>
+										</>
+									) : (
+										<>
+											<User className="h-9 w-9 text-muted-foreground" />
+											<Button
+												size="icon"
+												className="absolute bottom-0 right-0 h-5 w-5 rounded-full bg-primary"
+											>
+												<Plus className="h-3 w-3 text-primary-foreground" />
+											</Button>
+										</>
+									)}
+								</Label>
+								{avatarPreview && (
+									<Button
+										size="icon"
+										onClick={handleRemoveAvatar}
+										className="absolute right-0 top-0 h-5 w-5 rounded-full bg-destructive/90 text-destructive-foreground hover:bg-destructive"
+										aria-label="Удалить аватар"
+									>
+										<X className="h-3 w-3" />
+									</Button>
+								)}
+							</div>
+
+							{avatarError && (
+								<p className="text-sm text-destructive">{avatarError}</p>
+							)}
+						</div>
+
 						<div className="flex flex-col gap-2">
 							<Label htmlFor="email">Email</Label>
 							<div>
@@ -158,7 +270,7 @@ export function SignUpForm() {
 									minLength={8}
 									maxLength={128}
 									pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,128}"
-									title="Пароль должен быть длиной от 8 до 128 символов, включать как минимум одну цифру, одну букву в нижнем и одну букву в верхнем регистре"
+									title="Пароль должен содержать минимум 8 символов, включая цифру, строчную и заглавную букву"
 									aria-errormessage="password-error"
 									onBlur={onBlur}
 									onFocus={onFocus}

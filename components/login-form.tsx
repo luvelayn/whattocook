@@ -69,12 +69,14 @@ export function LoginForm() {
 									id="email"
 									type="email"
 									name="email"
-									placeholder="you@example.com"
+									placeholder="example@mail.com"
 									autoComplete="email"
 									required
 									disabled={isPending}
 									autoFocus
 									maxLength={254}
+									pattern="[^\s@]+@[^\s@]+\.[^\s@]+"
+									title="Введите корректный email адрес"
 									aria-errormessage="email-error"
 									onBlur={handleBlur}
 									onChange={handleChange}

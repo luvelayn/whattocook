@@ -1,7 +1,7 @@
 'use client';
 
 import { signUp, SignUpFormState } from '@/app/actions/auth/sign-up';
-import { ChangeEvent, FocusEvent, useActionState, useState } from 'react';
+import { FocusEvent, useActionState, useState } from 'react';
 import { useFormValidation } from '@/hooks/useFormValidation';
 import {
 	Card,
@@ -29,7 +29,7 @@ export function SignUpForm() {
 		validateField,
 		clearFieldError,
 		handleBlur,
-		handleChange,
+		handleFocus,
 		handleSubmit,
 	} = useFormValidation({
 		'confirm-password': {
@@ -61,14 +61,14 @@ export function SignUpForm() {
 		handleBlur(event);
 	};
 
-	const onChange = (event: ChangeEvent<HTMLInputElement>) => {
+	const onFocus = (event: FocusEvent<HTMLInputElement>) => {
 		const { target } = event;
 
 		if (target.name === 'password' && fieldErrors['confirm-password']) {
 			clearFieldError('confirm-password');
 		}
 
-		handleChange(event);
+		handleFocus(event);
 	};
 
 	return (
@@ -109,7 +109,7 @@ export function SignUpForm() {
 									title="Введите корректный email адрес"
 									aria-errormessage="email-error"
 									onBlur={onBlur}
-									onChange={onChange}
+									onFocus={onFocus}
 								/>
 							</div>
 							{fieldErrors.email && (
@@ -134,7 +134,7 @@ export function SignUpForm() {
 									maxLength={30}
 									aria-errormessage="name-error"
 									onBlur={onBlur}
-									onChange={onChange}
+									onFocus={onFocus}
 								/>
 							</div>
 							{fieldErrors.name && (
@@ -161,7 +161,7 @@ export function SignUpForm() {
 									title="Пароль должен быть длиной от 8 до 128 символов, включать как минимум одну цифру, одну букву в нижнем и одну букву в верхнем регистре"
 									aria-errormessage="password-error"
 									onBlur={onBlur}
-									onChange={onChange}
+									onFocus={onFocus}
 								/>
 								<Button
 									type="button"
@@ -196,7 +196,7 @@ export function SignUpForm() {
 									disabled={isPending}
 									aria-errormessage="confirm-password-error"
 									onBlur={onBlur}
-									onChange={onChange}
+									onFocus={onFocus}
 								/>
 							</div>
 							{fieldErrors['confirm-password'] && (

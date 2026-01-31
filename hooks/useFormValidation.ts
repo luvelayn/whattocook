@@ -1,10 +1,4 @@
-import {
-	ChangeEvent,
-	FocusEvent,
-	FormEvent,
-	useCallback,
-	useState,
-} from 'react';
+import { FocusEvent, FormEvent, useCallback, useState } from 'react';
 
 type ValidationRule =
 	| 'valueMissing'
@@ -94,7 +88,7 @@ export function useFormValidation(customRules: CustomValidationRules = {}) {
 		validateField(event.target);
 	};
 
-	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+	const handleFocus = (event: FocusEvent<HTMLInputElement>) => {
 		const { target } = event;
 
 		if (fieldErrors[target.name]) {
@@ -131,7 +125,7 @@ export function useFormValidation(customRules: CustomValidationRules = {}) {
 		validateField,
 		clearFieldError,
 		handleBlur,
-		handleChange,
+		handleFocus,
 		handleSubmit,
 	};
 }

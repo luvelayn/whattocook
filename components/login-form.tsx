@@ -29,7 +29,7 @@ export function LoginForm() {
 
 	const [state, formAction, isPending] = useActionState(login, initialState);
 	const [showPassword, setShowPassword] = useState(false);
-	const { fieldErrors, handleBlur, handleChange, handleSubmit } =
+	const { fieldErrors, handleBlur, handleFocus, handleSubmit } =
 		useFormValidation();
 
 	useEffect(() => {
@@ -79,7 +79,7 @@ export function LoginForm() {
 									title="Введите корректный email адрес"
 									aria-errormessage="email-error"
 									onBlur={handleBlur}
-									onChange={handleChange}
+									onFocus={handleFocus}
 								/>
 							</div>
 							{fieldErrors.email && (
@@ -114,7 +114,7 @@ export function LoginForm() {
 									maxLength={128}
 									aria-errormessage="password-error"
 									onBlur={handleBlur}
-									onChange={handleChange}
+									onFocus={handleFocus}
 								/>
 								<Button
 									type="button"

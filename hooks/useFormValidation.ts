@@ -91,6 +91,8 @@ export function useFormValidation(customRules: CustomValidationRules = {}) {
 	const handleFocus = (event: FocusEvent<HTMLInputElement>) => {
 		const { target } = event;
 
+		target.setAttribute('aria-invalid', String(false));
+
 		if (fieldErrors[target.name]) {
 			clearFieldError(target.name);
 		}

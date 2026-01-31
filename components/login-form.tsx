@@ -69,7 +69,9 @@ export function LoginForm() {
 					<Input type="hidden" name="redirect" value={redirectTo} />
 					<FieldGroup className="gap-4">
 						<Field className="gap-2">
-							<FieldLabel htmlFor="email">Email</FieldLabel>
+							<FieldLabel htmlFor="email">
+								Email <span className="text-destructive">*</span>
+							</FieldLabel>
 							<Input
 								id="email"
 								type="email"
@@ -78,7 +80,6 @@ export function LoginForm() {
 								autoComplete="email"
 								required
 								disabled={isPending}
-								autoFocus
 								maxLength={254}
 								pattern="[^\s@]+@[^\s@]+\.[^\s@]+"
 								title="Введите корректный email адрес"
@@ -91,7 +92,9 @@ export function LoginForm() {
 
 						<Field className="gap-2">
 							<div className="flex items-center justify-between">
-								<FieldLabel htmlFor="password">Пароль</FieldLabel>
+								<FieldLabel htmlFor="password">
+									Пароль <span className="text-destructive">*</span>
+								</FieldLabel>
 								<Link
 									href="/auth/reset-password"
 									className="text-sm underline-offset-4 hover:underline"
@@ -104,7 +107,7 @@ export function LoginForm() {
 									id="password"
 									type={showPassword ? 'text' : 'password'}
 									name="password"
-									placeholder="••••••••"
+									placeholder="•••••••••••••"
 									required
 									disabled={isPending}
 									minLength={8}

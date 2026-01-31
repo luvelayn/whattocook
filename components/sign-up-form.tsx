@@ -218,7 +218,9 @@ export function SignUpForm() {
 						</Field>
 
 						<Field className="gap-2">
-							<FieldLabel htmlFor="email">Email</FieldLabel>
+							<FieldLabel htmlFor="email">
+								Email <span className="text-destructive">*</span>
+							</FieldLabel>
 							<Input
 								id="email"
 								type="email"
@@ -238,7 +240,9 @@ export function SignUpForm() {
 						</Field>
 
 						<Field className="gap-2">
-							<FieldLabel htmlFor="name">Имя</FieldLabel>
+							<FieldLabel htmlFor="name">
+								Имя <span className="text-destructive">*</span>
+							</FieldLabel>
 							<Input
 								id="name"
 								type="text"
@@ -256,13 +260,15 @@ export function SignUpForm() {
 						</Field>
 
 						<Field className="gap-2">
-							<FieldLabel htmlFor="password">Пароль</FieldLabel>
+							<FieldLabel htmlFor="password">
+								Пароль <span className="text-destructive">*</span>
+							</FieldLabel>
 							<InputGroup>
 								<InputGroupInput
 									id="password"
 									type={showPassword ? 'text' : 'password'}
 									name="password"
-									placeholder="••••••••"
+									placeholder="•••••••••••••"
 									required
 									disabled={isPending}
 									minLength={8}
@@ -291,13 +297,13 @@ export function SignUpForm() {
 
 						<Field className="gap-2">
 							<FieldLabel htmlFor="confirm-password">
-								Подтвердите пароль
+								Подтвердите пароль <span className="text-destructive">*</span>
 							</FieldLabel>
 							<Input
 								id="confirm-password"
 								type="password"
 								name="confirm-password"
-								placeholder="••••••••"
+								placeholder="•••••••••••••"
 								required
 								disabled={isPending}
 								aria-errormessage="confirm-password-error"

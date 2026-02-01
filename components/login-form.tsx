@@ -149,12 +149,15 @@ export function LoginForm() {
 				>
 					{isPending ? 'Вход...' : 'Войти'}
 				</Button>
-				<Link
-					href="/auth/sign-up"
-					className="text-sm text-primary-dark underline-offset-4 hover:underline"
-				>
-					Зарегистрироваться
-				</Link>
+				<div className="text-sm text-muted-foreground">
+					Нет аккаунта?&nbsp;
+					<Link
+						href="/auth/sign-up"
+						className="text-primary-dark underline-offset-4 hover:underline"
+					>
+						Зарегистрироваться
+					</Link>
+				</div>
 			</CardFooter>
 		</Card>
 	);

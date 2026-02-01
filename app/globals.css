@@ -3,107 +3,105 @@
 @tailwind utilities;
 
 @layer base {
-	:root {
-		/* Backgrounds */
-		--background: 120 25% 98%;
-		--foreground: 86 35% 14%;
+    :root {
+        /* Backgrounds */
+        --background: 80 23% 97%;
+        --foreground: 86 35% 14%;
 
-		/* Cards & Popovers */
-		--card: 0 0% 100%;
-		--card-foreground: 86 35% 14%;
-		--popover: 0 0% 100%;
-		--popover-foreground: 86 35% 14%;
+        /* Cards & Popovers */
+        --card: 0 0% 100%;
+        --card-foreground: 86 35% 14%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 86 35% 14%;
 
-		/* Primary */
-		--primary: 88 48% 66%;
-		--primary-light: 88 48% 85%;
-		--primary-dark: 88 55% 35%;
-		--primary-foreground: 86 35% 14%;
+        /* Primary */
+        --primary: 87 49% 65%;
+        --primary-light: 81 49% 85%;
+        --primary-dark: 94 56% 34%;
+        --primary-foreground: 86 35% 14%;
 
-		/* Secondary */
-		--secondary: 5 71% 66%;
-		--secondary-foreground: 0 0% 100%;
+        /* Secondary */
+        --secondary: 6 65% 65%;
+        --secondary-foreground: 0 0% 100%;
 
-		/* Error */
-		--destructive: 10 65% 43%;
-		--destructive-foreground: 0 0% 100%;
+        /* Error */
+        --destructive: 9 71% 44%;
+        --destructive-foreground: 0 0% 100%;
 
-		/* Muted & Accent */
-		--muted: 120 15% 96%;
-		--muted-foreground: 80 12% 48%;
-		--accent: 88 48% 85%;
-		--accent-foreground: 86 35% 14%;
+        /* Muted & Accent */
+        --muted: 87 16% 89%;
+        --muted-foreground: 90 5% 61%;
 
-		/* Border & Input */
-		--border: 120 15% 88%;
-		--input: 120 15% 88%;
-		--ring: 88 48% 66%;
+        /* Border & Input */
+        --border: 120 15% 88%;
+        --input: 120 15% 88%;
+        --ring: 87 49% 65%;
 
-		/* Border Radius */
-		--radius: 0.75rem;
-	}
+        /* Border Radius */
+        --radius: 0.75rem;
+    }
 
-	.dark {
-		--background: 100 25% 8%;
-		--foreground: 120 25% 98%;
+    .dark {
+        --background: 100 25% 8%;
+        --foreground: 120 25% 98%;
 
-		--card: 100 20% 12%;
-		--card-foreground: 120 25% 98%;
-		--popover: 100 20% 12%;
-		--popover-foreground: 120 25% 98%;
+        --card: 100 20% 12%;
+        --card-foreground: 120 25% 98%;
+        --popover: 100 20% 12%;
+        --popover-foreground: 120 25% 98%;
 
-		--primary: 88 48% 56%;
-		--primary-light: 88 35% 40%;
-		--primary-dark: 88 55% 70%;
-		--primary-foreground: 0 0% 100%;
+        --primary: 88 48% 56%;
+        --primary-light: 88 35% 40%;
+        --primary-dark: 88 55% 70%;
+        --primary-foreground: 0 0% 100%;
 
-		--secondary: 5 71% 60%;
-		--secondary-foreground: 0 0% 100%;
+        --secondary: 5 71% 60%;
+        --secondary-foreground: 0 0% 100%;
 
-		--destructive: 10 65% 50%;
-		--destructive-foreground: 0 0% 100%;
+        --destructive: 10 65% 50%;
+        --destructive-foreground: 0 0% 100%;
 
-		--text-primary: 120 25% 98%;
-		--text-secondary: 80 12% 70%;
-		--text-disabled: 80 8% 50%;
+        --text-primary: 120 25% 98%;
+        --text-secondary: 80 12% 70%;
+        --text-disabled: 80 8% 50%;
 
-		--muted: 100 15% 18%;
-		--muted-foreground: 80 12% 65%;
-		--accent: 88 35% 25%;
-		--accent-foreground: 120 25% 98%;
+        --muted: 100 15% 18%;
+        --muted-foreground: 80 12% 65%;
+        --accent: 88 35% 25%;
+        --accent-foreground: 120 25% 98%;
 
-		--border: 100 15% 20%;
-		--input: 100 15% 20%;
-		--ring: 88 48% 56%;
-	}
+        --border: 100 15% 20%;
+        --input: 100 15% 20%;
+        --ring: 88 48% 56%;
+    }
 
-	* {
-		@apply border-border;
-	}
+    * {
+        @apply border-border;
+    }
 
-	body {
-		@apply bg-background font-sans text-foreground;
-	}
+    body {
+        @apply bg-background font-sans text-foreground;
+    }
 
-	h1,
-	h2,
-	h3 {
-		@apply font-jost font-medium;
-	}
+    h1,
+    h2,
+    h3 {
+        @apply font-jost font-medium;
+    }
 
-	h1 {
-		@apply text-4xl;
-	}
+    h1 {
+        @apply text-4xl;
+    }
 
-	h2 {
-		@apply text-2xl;
-	}
+    h2 {
+        @apply text-2xl;
+    }
 
-	h3 {
-		@apply text-xl;
-	}
+    h3 {
+        @apply text-xl;
+    }
 
-	h4 {
-		@apply text-base font-medium;
-	}
+    h4 {
+        @apply text-base font-medium;
+    }
 }

@@ -1,13 +1,7 @@
 'use client';
 
 import { signUp, SignUpFormState } from '@/app/actions/auth/sign-up';
-import {
-	ChangeEvent,
-	FocusEvent,
-	useActionState,
-	useRef,
-	useState,
-} from 'react';
+import { ChangeEvent, FocusEvent, useActionState, useState } from 'react';
 import { useFormValidation } from '@/hooks/useFormValidation';
 import {
 	Card,
@@ -51,7 +45,6 @@ export function SignUpForm() {
 	const [showPassword, setShowPassword] = useState(false);
 	const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
 	const [avatarError, setAvatarError] = useState<string>('');
-	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	const {
 		fieldErrors,
@@ -125,9 +118,6 @@ export function SignUpForm() {
 
 	const handleRemoveAvatar = () => {
 		setAvatarPreview(null);
-		if (fileInputRef.current) {
-			fileInputRef.current.value = '';
-		}
 	};
 
 	return (
@@ -155,7 +145,6 @@ export function SignUpForm() {
 							className="flex flex-col items-center"
 						>
 							<Input
-								ref={fileInputRef}
 								id="avatar"
 								type="file"
 								name="avatar"
@@ -183,34 +172,28 @@ export function SignUpForm() {
 												fill
 												className="rounded-full object-cover"
 											/>
-											<div className="absolute inset-0 flex items-center justify-center rounded-full bg-black/60 opacity-0 transition-opacity group-hover:opacity-100">
+											<div className="absolute inset-0 flex items-center justify-center rounded-full bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
 												<Plus className="h-8 w-8 text-white" />
 											</div>
 										</>
 									) : (
 										<>
 											<User className="h-9 w-9 text-muted-foreground" />
-											<Button
-												type="button"
-												size="icon"
-												onClick={() => {
-													fileInputRef.current?.click();
-												}}
-												className="absolute bottom-0 right-0 h-5 w-5 rounded-full bg-primary"
-											>
+											<div className="absolute bottom-0 right-0 flex h-5 w-5 items-center justify-center rounded-full bg-primary">
 												<Plus className="h-3 w-3 text-primary-foreground" />
-											</Button>
+											</div>
 										</>
 									)}
 								</FieldLabel>
 								{avatarPreview && (
 									<Button
 										type="button"
-										size="icon"
+										variant="destructive"
+										size="icon-xs"
 										onClick={handleRemoveAvatar}
-										className="absolute right-0 top-0 h-5 w-5 rounded-full bg-destructive/90 text-destructive-foreground hover:bg-destructive"
+										className="absolute right-0 top-0 size-5 rounded-full"
 									>
-										<X className="h-3 w-3" />
+										<X />
 									</Button>
 								)}
 							</div>
@@ -330,12 +313,15 @@ export function SignUpForm() {
 				>
 					{isPending ? 'Регистрация...' : 'Зарегистрироваться'}
 				</Button>
-				<Link
-					href="/auth/login"
-					className="text-sm text-primary-dark underline-offset-4 hover:underline"
-				>
-					Войти
-				</Link>
+				<div className="text-sm text-muted-foreground">
+					Уже есть аккаунт?&nbsp;
+					<Link
+						href="/auth/login"
+						className="text-primary-dark underline-offset-4 hover:underline"
+					>
+						Войти
+					</Link>
+				</div>
 			</CardFooter>
 		</Card>
 	);

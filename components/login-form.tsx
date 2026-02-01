@@ -24,6 +24,7 @@ import {
 import {
 	InputGroup,
 	InputGroupAddon,
+	InputGroupButton,
 	InputGroupInput,
 } from '@/components/ui/input-group';
 
@@ -117,16 +118,16 @@ export function LoginForm() {
 									onChange={handleChange}
 								/>
 								<InputGroupAddon align="inline-end">
-									<Button
-										type="button"
-										variant="ghost"
-										size="sm"
-										className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+									<InputGroupButton
+										aria-label={
+											showPassword ? 'Скрыть пароль' : 'Показать пароль'
+										}
+										size="icon-xs"
 										onClick={() => setShowPassword(!showPassword)}
 										disabled={isPending}
 									>
 										{showPassword ? <EyeOffIcon /> : <EyeIcon />}
-									</Button>
+									</InputGroupButton>
 								</InputGroupAddon>
 							</InputGroup>
 							<FieldError>{fieldErrors.password}</FieldError>

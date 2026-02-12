@@ -318,7 +318,7 @@ export function SignUpForm() {
 				<div className="text-sm text-muted-foreground">
 					Уже есть аккаунт?&nbsp;
 					<Link
-						href="/auth/login"
+						href="/login"
 						className="text-primary-dark underline-offset-4 hover:underline"
 					>
 						Войти

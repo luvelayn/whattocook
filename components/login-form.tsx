@@ -97,7 +97,7 @@ export function LoginForm() {
 									Пароль <span className="text-destructive">*</span>
 								</FieldLabel>
 								<Link
-									href="/auth/reset-password"
+									href="/reset-password"
 									className="text-sm underline-offset-4 hover:underline"
 								>
 									Забыли пароль?
@@ -153,7 +153,7 @@ export function LoginForm() {
 				<div className="text-sm text-muted-foreground">
 					Нет аккаунта?&nbsp;
 					<Link
-						href="/auth/sign-up"
+						href="/sign-up"
 						className="text-primary-dark underline-offset-4 hover:underline"
 					>
 						Зарегистрироваться

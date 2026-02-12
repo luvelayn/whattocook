@@ -3,13 +3,7 @@
 import { signUp, SignUpFormState } from '@/app/actions/auth/sign-up';
 import { ChangeEvent, FocusEvent, useActionState, useState } from 'react';
 import { useFormValidation } from '@/hooks/useFormValidation';
-import {
-	Card,
-	CardContent,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import Link from 'next/link';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -119,15 +113,13 @@ export function SignUpForm() {
 
 	const handleRemoveAvatar = () => {
 		setAvatarPreview(null);
+		setAvatarError('');
+		const input = document.getElementById('avatar') as HTMLInputElement;
+		if (input) input.value = '';
 	};
 
 	return (
-		<Card>
-			<CardHeader className="grid-rows-[auto]">
-				<CardTitle className="text-center font-jost text-2xl font-medium">
-					Регистрация
-				</CardTitle>
-			</CardHeader>
+		<Card className="border-border/40 py-10 shadow-lg">
 			<CardContent>
 				<form
 					id="sign-up-form"
@@ -140,10 +132,11 @@ export function SignUpForm() {
 					}}
 					noValidate
 				>
-					<FieldGroup className="gap-4">
+					<FieldGroup className="gap-5">
+						{/* Aватар */}
 						<Field
 							orientation={'horizontal'}
-							className="flex flex-col items-center"
+							className="flex flex-col items-center gap-3"
 						>
 							<Input
 								id="avatar"
@@ -153,12 +146,13 @@ export function SignUpForm() {
 								onChange={handleAvatarChange}
 								disabled={isPending}
 								className="hidden"
+								aria-describedby="avatar-description"
 							/>
 							<div className="relative">
 								<FieldLabel
 									htmlFor="avatar"
 									className={cn(
-										'group relative flex h-20 w-20 cursor-pointer items-center justify-center rounded-full border-2 border-dashed border-muted-foreground/30 bg-muted/30 transition-all hover:border-primary hover:bg-muted/50',
+										'group relative flex size-24 cursor-pointer items-center justify-center rounded-full border-2 border-dashed border-muted-foreground/25 bg-muted/40 transition-all hover:border-primary/50 hover:bg-muted/60',
 										avatarPreview &&
 											'border-solid border-border bg-transparent',
 										isPending && 'cursor-not-allowed opacity-50'
@@ -169,19 +163,22 @@ export function SignUpForm() {
 										<>
 											<Image
 												src={avatarPreview}
-												alt="Аватар"
+												alt="Предпросмотр аватара"
 												fill
 												className="rounded-full object-cover"
 											/>
-											<div className="absolute inset-0 flex items-center justify-center rounded-full bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
-												<Plus className="h-8 w-8 text-white" />
+											<div className="absolute inset-0 flex items-center justify-center rounded-full bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
+												<Plus
+													strokeWidth={1.5}
+													className="size-10 text-white"
+												/>
 											</div>
 										</>
 									) : (
 										<>
-											<User className="h-9 w-9 text-muted-foreground" />
-											<div className="absolute bottom-0 right-0 flex h-5 w-5 items-center justify-center rounded-full bg-primary">
-												<Plus className="h-3 w-3 text-primary-foreground" />
+											<User className="size-10 text-muted-foreground/60" />
+											<div className="absolute bottom-0 right-0 flex size-6 items-center justify-center rounded-full bg-primary shadow-sm">
+												<Plus className="size-4 text-primary-foreground" />
 											</div>
 										</>
 									)}
@@ -193,15 +190,24 @@ export function SignUpForm() {
 										variant="destructive"
 										size="icon-xs"
 										onClick={handleRemoveAvatar}
-										className="absolute right-0 top-0 size-5 rounded-full"
+										className="absolute right-0 top-0 size-6 rounded-full"
 									>
-										<X />
+										<X className="size-4" />
 									</Button>
 								)}
 							</div>
-							{avatarError && <FieldError>{avatarError}</FieldError>}
+							<span
+								id="avatar-description"
+								className="text-xs text-muted-foreground"
+							>
+								JPG, PNG или WebP до 2MB
+							</span>
+							{avatarError && (
+								<FieldError className="text-center">{avatarError}</FieldError>
+							)}
 						</Field>
 
+						{/* Email */}
 						<Field className="gap-2">
 							<FieldLabel htmlFor="email">
 								Email <span className="text-destructive">*</span>
@@ -224,6 +230,7 @@ export function SignUpForm() {
 							<FieldError>{fieldErrors.email}</FieldError>
 						</Field>
 
+						{/* Имя */}
 						<Field className="gap-2">
 							<FieldLabel htmlFor="name">
 								Имя <span className="text-destructive">*</span>
@@ -233,6 +240,7 @@ export function SignUpForm() {
 								type="text"
 								name="name"
 								placeholder="Пётр"
+								autoComplete="name"
 								required
 								disabled={isPending}
 								minLength={2}
@@ -244,6 +252,7 @@ export function SignUpForm() {
 							<FieldError>{fieldErrors.name}</FieldError>
 						</Field>
 
+						{/* Пароль */}
 						<Field className="gap-2">
 							<FieldLabel htmlFor="password">
 								Пароль <span className="text-destructive">*</span>
@@ -254,6 +263,7 @@ export function SignUpForm() {
 									type={showPassword ? 'text' : 'password'}
 									name="password"
 									placeholder="•••••••••••••"
+									autoComplete="new-password"
 									required
 									disabled={isPending}
 									minLength={8}
@@ -278,8 +288,12 @@ export function SignUpForm() {
 								</InputGroupAddon>
 							</InputGroup>
 							<FieldError>{fieldErrors.password}</FieldError>
+							<p className="text-xs text-muted-foreground">
+								Минимум 8 символов, одна цифра, заглавная и строчная буква
+							</p>
 						</Field>
 
+						{/* Подтверждение пароля */}
 						<Field className="gap-2">
 							<FieldLabel htmlFor="confirm-password">
 								Подтвердите пароль <span className="text-destructive">*</span>
@@ -289,6 +303,7 @@ export function SignUpForm() {
 								type="password"
 								name="confirm-password"
 								placeholder="•••••••••••••"
+								autoComplete="new-password"
 								required
 								disabled={isPending}
 								aria-errormessage="confirm-password-error"
@@ -298,32 +313,37 @@ export function SignUpForm() {
 							<FieldError>{fieldErrors['confirm-password']}</FieldError>
 						</Field>
 
+						{/* Общая ошибка */}
 						{state.error && (
-							<p className="text-sm text-destructive" role="alert">
-								{state.error}
-							</p>
+							<div className="rounded-md border border-destructive/50 bg-destructive/10 p-3">
+								<p className="text-sm text-destructive" role="alert">
+									{state.error}
+								</p>
+							</div>
 						)}
 					</FieldGroup>
 				</form>
 			</CardContent>
-			<CardFooter className="flex flex-col gap-3">
+			<CardFooter className="flex flex-col gap-4">
 				<Button
 					type="submit"
 					form="sign-up-form"
 					className="w-full"
 					disabled={isPending}
+					size="lg"
 				>
-					{isPending ? 'Регистрация...' : 'Зарегистрироваться'}
+					{isPending ? 'Создание аккаунта...' : 'Зарегистрироваться'}
 				</Button>
-				<div className="text-sm text-muted-foreground">
-					Уже есть аккаунт?&nbsp;
+				<p className="text-center text-sm text-muted-foreground">
+					Уже есть аккаунт?{' '}
 					<Link
 						href="/login"
-						className="text-primary-dark underline-offset-4 hover:underline"
+						className="font-medium text-primary underline-offset-4 hover:underline"
+						tabIndex={isPending ? -1 : 0}
 					>
 						Войти
 					</Link>
-				</div>
+				</p>
 			</CardFooter>
 		</Card>
 	);

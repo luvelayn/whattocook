@@ -54,11 +54,7 @@ export default {
 				sm: 'calc(var(--radius) - 4px)',
 			},
 			fontFamily: {
-				sans: ['var(--font-roboto)', 'sans-serif'],
-				jost: ['var(--font-jost)', 'sans-serif'],
-			},
-			fontSize: {
-				caption: '0.75rem',
+				sans: ['var(--font-sans)', 'sans-serif'],
 			},
 		},
 	},

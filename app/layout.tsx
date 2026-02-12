@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Jost, Roboto } from 'next/font/google';
+import { Geist } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
 import './globals.css';
 
@@ -14,18 +14,9 @@ export const metadata: Metadata = {
 		'Никогда не ломайте голову над вопросом "Что приготовить?". whattocook — ваша личная кулинарная книга, которая хранит рецепты и выбирает случайное блюдо, когда вы не можете определиться. Сохраняйте рецепты по удобному шаблону и доверьтесь случаю!',
 };
 
-const roboto = Roboto({
-	variable: '--font-roboto',
-	display: 'swap',
+const geist = Geist({
 	subsets: ['latin', 'cyrillic'],
-	weight: ['400', '500'],
-});
-
-const jost = Jost({
-	variable: '--font-jost',
-	display: 'swap',
-	subsets: ['latin', 'cyrillic'],
-	weight: ['500'],
+	variable: '--font-sans',
 });
 
 export default function RootLayout({
@@ -34,8 +25,8 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="ru" suppressHydrationWarning>
-			<body className={`${roboto.variable} ${jost.variable} antialiased`}>
+		<html lang="ru" suppressHydrationWarning className={geist.variable}>
+			<body className={`antialiased`}>
 				<ThemeProvider
 					attribute="class"
 					defaultTheme="light"

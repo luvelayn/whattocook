@@ -79,5 +79,5 @@ export async function signUp(
 	}
 
 	revalidatePath('/');
-	redirect('/auth/confirm');
+	redirect('/confirm-email');
 }

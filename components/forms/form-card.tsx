@@ -10,7 +10,7 @@ interface AuthFormCardProps {
 	action: (formData: FormData) => void;
 }
 
-export function AuthFormCard({
+export function FormCard({
 	children,
 	footer,
 	formId,

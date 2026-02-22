@@ -1,7 +1,7 @@
 'use client';
 
 import { signUp } from '@/app/actions/auth/sign-up';
-import { useActionState } from 'react';
+import { ChangeEvent, FocusEvent, useActionState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { FieldGroup } from '@/components/ui/field';
@@ -22,8 +22,49 @@ const initialState: FormState = {
 export function SignUpForm() {
 	const [state, formAction, isPending] = useActionState(signUp, initialState);
 	const avatar = useAvatarUpload();
-	const { fieldErrors, handleBlur, handleChange, handleSubmit } =
-		useFormValidation();
+	const {
+		fieldErrors,
+		validateField,
+		clearFieldError,
+		handleBlur,
+		handleChange,
+		handleSubmit,
+	} = useFormValidation({
+		'confirm-password': {
+			validate: (value, form) => {
+				const password = (
+					form.elements.namedItem('password') as HTMLInputElement
+				)?.value;
+				return value !== password ? 'Пароли не совпадают' : null;
+			},
+		},
+	});
+
+	const onBlur = (event: FocusEvent<HTMLInputElement>) => {
+		const { target } = event;
+
+		if (target.name === 'password' && target.form) {
+			const confirmPasswordField = target.form.elements.namedItem(
+				'confirm-password'
+			) as HTMLInputElement;
+
+			if (confirmPasswordField && confirmPasswordField.value) {
+				validateField(confirmPasswordField);
+			}
+		}
+
+		handleBlur(event);
+	};
+
+	const onChange = (event: ChangeEvent<HTMLInputElement>) => {
+		const { target } = event;
+
+		if (target.name === 'password' && fieldErrors['confirm-password']) {
+			clearFieldError('confirm-password');
+		}
+
+		handleChange(event);
+	};
 
 	return (
 		<AuthFormCard
@@ -72,8 +113,8 @@ export function SignUpForm() {
 					withStrengthRules
 					error={fieldErrors.password}
 					disabled={isPending}
-					onBlur={handleBlur}
-					onChange={handleChange}
+					onBlur={onBlur}
+					onChange={onChange}
 				/>
 				<PasswordField
 					id="confirm-password"

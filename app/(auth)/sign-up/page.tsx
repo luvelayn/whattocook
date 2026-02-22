@@ -1,4 +1,4 @@
-import { SignUpForm } from '@/components/sign-up-form';
+import { SignUpForm } from '@/components/sign-up/sign-up-form';
 import { Suspense } from 'react';
 import { Spinner } from '@/components/ui/spinner';
 

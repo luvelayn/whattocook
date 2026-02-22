@@ -1,8 +1,8 @@
-import { Logo } from '@/components/logo';
-import { NavMenu } from '@/components/nav-menu';
+import { Logo } from '@/components/layout/logo';
+import { NavMenu } from '@/components/layout/nav-menu';
 import { Suspense } from 'react';
-import { Spinner } from './ui/spinner';
-import { AuthButtons } from '@/components/auth-buttons';
+import { Spinner } from '../ui/spinner';
+import { AuthButtons } from '@/components/auth/auth-buttons';
 
 const NAV_LINKS = [
 	{ name: 'Главная', href: '/' },

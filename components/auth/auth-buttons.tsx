@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Plus } from 'lucide-react';
-import { DropdownProfileMenu } from '@/components/dropdown-profile-menu';
+import { DropdownProfileMenu } from '@/components/auth/dropdown-profile-menu';
 import { getCurrentProfile } from '@/services/profile.service';
 
 export async function AuthButtons() {

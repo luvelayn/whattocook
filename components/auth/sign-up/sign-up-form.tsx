@@ -5,13 +5,13 @@ import { ChangeEvent, FocusEvent, useActionState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { FieldGroup } from '@/components/ui/field';
-import { AvatarField } from '@/components/sign-up/avatar-field';
+import { AvatarField } from '@/components/auth/sign-up/avatar-field';
 import { useAvatarUpload } from '@/hooks/useAvatarUpload';
-import { EmailField } from '@/components/forms/email-field';
-import { PasswordField } from '@/components/forms/password-field';
+import { EmailField } from '@/components/auth/form-fields/email-field';
+import { PasswordField } from '@/components/auth/form-fields/password-field';
 import { FormError } from '@/components/forms/form-error';
-import { NameField } from '@/components/forms/name-field';
-import { AuthFormCard } from '@/components/forms/auth-form-card';
+import { NameField } from '@/components/auth/form-fields/name-field';
+import { FormCard } from '@/components/forms/form-card';
 import { useFormValidation } from '@/hooks/useFormValidation';
 import { FormState } from '@/types/forms';
 
@@ -67,7 +67,7 @@ export function SignUpForm() {
 	};
 
 	return (
-		<AuthFormCard
+		<FormCard
 			formId="sign-up-form"
 			isPending={isPending}
 			onSubmit={handleSubmit}
@@ -127,6 +127,6 @@ export function SignUpForm() {
 				/>
 				<FormError message={state.error} />
 			</FieldGroup>
-		</AuthFormCard>
+		</FormCard>
 	);
 }

@@ -8,10 +8,10 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useFormValidation } from '@/hooks/useFormValidation';
 import { FieldGroup } from '@/components/ui/field';
-import { EmailField } from '@/components/forms/email-field';
-import { PasswordField } from '@/components/forms/password-field';
+import { EmailField } from '@/components/auth/form-fields/email-field';
+import { PasswordField } from '@/components/auth/form-fields/password-field';
 import { FormError } from '@/components/forms/form-error';
-import { AuthFormCard } from '@/components/forms/auth-form-card';
+import { FormCard } from '@/components/forms/form-card';
 import { FormStateWithRedirect } from '@/types/forms';
 
 const initialState: FormStateWithRedirect = {
@@ -31,7 +31,7 @@ export function LoginForm() {
 	}, [redirectTo, router, state]);
 
 	return (
-		<AuthFormCard
+		<FormCard
 			formId="login-form"
 			isPending={isPending}
 			onSubmit={handleSubmit}
@@ -83,6 +83,6 @@ export function LoginForm() {
 				/>
 				<FormError message={state.error} />
 			</FieldGroup>
-		</AuthFormCard>
+		</FormCard>
 	);
 }

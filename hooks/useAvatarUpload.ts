@@ -1,12 +1,5 @@
 import { RefObject, useRef, useState } from 'react';
-
-const MAX_FILE_SIZE = 2 * 1024 * 1024;
-const ACCEPTED_IMAGE_TYPES = [
-	'image/jpeg',
-	'image/jpg',
-	'image/png',
-	'image/webp',
-];
+import { validateAvatarFile } from '@/services/storage.service';
 
 export type AvatarUploadState = {
 	preview: string | null;
@@ -22,18 +15,14 @@ export function useAvatarUpload(): AvatarUploadState {
 	const inputRef = useRef<HTMLInputElement>(null);
 
 	const handleChange = (file: File | undefined) => {
-		setError('');
-
 		if (!file) return;
 
-		if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
-			setError('Поддерживаются только JPG, PNG и WebP форматы');
-			return;
-		}
+		const validationError = validateAvatarFile(file);
 
-		if (file.size > MAX_FILE_SIZE) {
-			setError('Размер файла не должен превышать 2MB');
-			return;
+		if (validationError) {
+			setError(validationError);
+		} else {
+			setError('');
 		}
 
 		const reader = new FileReader();

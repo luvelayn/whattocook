@@ -1,6 +1,6 @@
 'use client';
 
-import { login, LoginFormState } from '@/app/actions/auth/login';
+import { login } from '@/app/actions/auth/login';
 import { useActionState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
@@ -12,8 +12,9 @@ import { EmailField } from '@/components/forms/email-field';
 import { PasswordField } from '@/components/forms/password-field';
 import { FormError } from '@/components/forms/form-error';
 import { AuthFormCard } from '@/components/forms/auth-form-card';
+import { FormStateWithRedirect } from '@/types/forms';
 
-const initialState: LoginFormState = {
+const initialState: FormStateWithRedirect = {
 	error: '',
 };
 

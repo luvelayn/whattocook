@@ -7,7 +7,7 @@ import {
 } from '@/components/ui/input-group';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
 import { useState } from 'react';
-import { FieldProps } from '@/components/forms/types';
+import { FieldProps } from '@/types/forms';
 
 type PasswordFieldProps = FieldProps & {
 	id?: string;

@@ -1,50 +1,27 @@
 'use server';
 
-import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
-
-export type LoginFormState = {
-	error: string;
-	redirect?: string;
-};
+import { AuthError, loginUser } from '@/services/auth.service';
+import { formatAuthError } from '@/lib/errors/auth-errors';
+import type { FormStateWithRedirect } from '@/types/forms';
 
 export async function login(
-	prevState: LoginFormState | null,
+	_prevState: FormStateWithRedirect | null,
 	formData: FormData
-): Promise<LoginFormState> {
-	const supabase = await createClient();
-
+): Promise<FormStateWithRedirect> {
 	const redirect = (formData.get('redirect') as string) || '/';
-	const loginData = {
-		email: (formData.get('email') as string).trim(),
-		password: formData.get('password') as string,
-	};
+	const email = (formData.get('email') as string).trim();
+	const password = formData.get('password') as string;
 
 	try {
-		const { error } = await supabase.auth.signInWithPassword(loginData);
-
-		if (error) {
-			let errorMessage = error.message;
-
-			if (error.code === 'invalid_credentials') {
-				errorMessage = 'Неверный email или пароль';
-			}
-
-			return {
-				error: errorMessage,
-			};
-		}
-
+		await loginUser({ email, password });
 		revalidatePath('/');
-
-		return {
-			error: '',
-			redirect: redirect,
-		};
+		return { error: '', redirect };
 	} catch (error) {
-		console.error('Login error: ', error);
-		return {
-			error: 'Произошла непредвиденная ошибка',
-		};
+		if (error instanceof AuthError) {
+			return { error: formatAuthError(error.code) };
+		}
+		console.error('Login unexpected error:', error);
+		return { error: formatAuthError(null) };
 	}
 }

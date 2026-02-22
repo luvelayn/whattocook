@@ -1,6 +1,6 @@
 'use client';
 
-import { signUp, SignUpFormState } from '@/app/actions/auth/sign-up';
+import { signUp } from '@/app/actions/auth/sign-up';
 import { useActionState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -13,8 +13,9 @@ import { FormError } from '@/components/forms/form-error';
 import { NameField } from '@/components/forms/name-field';
 import { AuthFormCard } from '@/components/forms/auth-form-card';
 import { useFormValidation } from '@/hooks/useFormValidation';
+import { FormState } from '@/types/forms';
 
-const initialState: SignUpFormState = {
+const initialState: FormState = {
 	error: '',
 };
 

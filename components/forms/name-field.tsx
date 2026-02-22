@@ -1,6 +1,6 @@
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { FieldProps } from '@/components/forms/types';
+import { FieldProps } from '@/types/forms';
 
 export function NameField({ error, disabled, onBlur, onChange }: FieldProps) {
 	return (

@@ -10,10 +10,8 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { LogOutIcon, User } from 'lucide-react';
 import { logout } from '@/app/actions/auth/logout';
-import { Database } from '@/lib/supabase/database.types';
 import Link from 'next/link';
-
-type TProfile = Database['public']['Tables']['profiles']['Row'];
+import { TProfile } from '@/types/database';
 
 type DropdownProfileMenuProps = {
 	profile: TProfile;

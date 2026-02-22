@@ -1,21 +1,11 @@
-import { createClient } from '@/lib/supabase/server';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Plus } from 'lucide-react';
 import { DropdownProfileMenu } from '@/components/dropdown-profile-menu';
+import { getCurrentProfile } from '@/services/profile.service';
 
 export async function AuthButtons() {
-	const supabase = await createClient();
-
-	const {
-		data: { user },
-	} = await supabase.auth.getUser();
-
-	const { data: profile } = await supabase
-		.from('profiles')
-		.select('*')
-		.eq('id', user?.id || '0')
-		.single();
+	const profile = await getCurrentProfile();
 
 	return (
 		<>

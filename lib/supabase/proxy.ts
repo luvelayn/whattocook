@@ -34,10 +34,13 @@ export async function updateSession(request: NextRequest) {
 
 	const pathname = request.nextUrl.pathname;
 
-	const isAuthRoute =
-		pathname.startsWith('/login') || pathname.startsWith('/sign-up');
+	const PUBLIC_PATHS = ['/'];
+	const AUTH_PATHS = ['/login', '/sign-up', '/confirm-email'];
 
-	if (pathname !== '/' && !user && !isAuthRoute) {
+	const isPublicRoute = PUBLIC_PATHS.some((p) => pathname === p);
+	const isAuthRoute = AUTH_PATHS.some((p) => pathname.startsWith(p));
+
+	if (!user && !isPublicRoute && !isAuthRoute) {
 		const url = request.nextUrl.clone();
 		url.pathname = '/login';
 		url.searchParams.set('redirect', pathname);

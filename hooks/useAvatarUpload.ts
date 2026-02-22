@@ -21,9 +21,10 @@ export function useAvatarUpload(): AvatarUploadState {
 
 		if (validationError) {
 			setError(validationError);
-		} else {
-			setError('');
+			return;
 		}
+
+		setError('');
 
 		const reader = new FileReader();
 		reader.onloadend = () => {

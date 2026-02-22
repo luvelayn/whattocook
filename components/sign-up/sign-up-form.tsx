@@ -28,6 +28,7 @@ export function SignUpForm() {
 	return (
 		<AuthFormCard
 			formId="sign-up-form"
+			isPending={isPending}
 			onSubmit={handleSubmit}
 			action={formAction}
 			footer={

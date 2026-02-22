@@ -33,6 +33,7 @@ export function LoginForm() {
 	return (
 		<AuthFormCard
 			formId="login-form"
+			isPending={isPending}
 			onSubmit={handleSubmit}
 			action={formAction}
 			footer={

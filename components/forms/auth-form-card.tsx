@@ -5,6 +5,7 @@ interface AuthFormCardProps {
 	children: React.ReactNode;
 	footer: React.ReactNode;
 	formId: string;
+	isPending?: boolean;
 	onSubmit: FormEventHandler<HTMLFormElement>;
 	action: (formData: FormData) => void;
 }
@@ -13,6 +14,7 @@ export function AuthFormCard({
 	children,
 	footer,
 	formId,
+	isPending,
 	onSubmit,
 	action,
 }: AuthFormCardProps) {
@@ -24,7 +26,8 @@ export function AuthFormCard({
 					onSubmit={onSubmit}
 					action={action}
 					onKeyDown={(e) => {
-						if (e.key === 'Enter') e.currentTarget.requestSubmit();
+						if (e.key === 'Enter' && !isPending)
+							e.currentTarget.requestSubmit();
 					}}
 					noValidate
 				>

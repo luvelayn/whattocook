@@ -1,16 +1,13 @@
 import { SignUpForm } from '@/components/auth/sign-up/sign-up-form';
+import { AuthPageHeader } from '@/components/auth/auth-page-header';
 
-export default async function SignUpPage() {
+export default function SignUpPage() {
 	return (
-		<div className="w-full max-w-sm space-y-8">
-			<div className="space-y-2 text-center">
-				<h1 className="text-3xl font-medium tracking-tight">
-					Добро пожаловать
-				</h1>
-				<p className="text-sm text-muted-foreground">
-					Создайте аккаунт, чтобы начать
-				</p>
-			</div>
+		<div className="space-y-8">
+			<AuthPageHeader
+				title="Добро пожаловать"
+				description="Создайте аккаунт, чтобы начать"
+			/>
 			<SignUpForm />
 		</div>
 	);

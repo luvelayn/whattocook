@@ -5,42 +5,46 @@ import { usePathname } from 'next/navigation';
 import {
 	NavigationMenu,
 	NavigationMenuItem,
-	NavigationMenuLink,
 	NavigationMenuList,
 } from '@/components/ui/navigation-menu';
 import { cn } from '@/lib/utils';
 
-interface NavLink {
+type NavLink = {
 	name: string;
 	href: string;
-}
+};
 
-export function NavMenu({ links }: { links: NavLink[] }) {
+type NavMenuProps = {
+	links: NavLink[];
+	orientation?: 'horizontal' | 'vertical';
+};
+
+export function NavMenu({ links, orientation = 'horizontal' }: NavMenuProps) {
 	const pathname = usePathname();
 
 	return (
-		<NavigationMenu>
-			<NavigationMenuList className="gap-6">
+		<NavigationMenu orientation={orientation}>
+			<NavigationMenuList
+				className={cn(
+					orientation === 'horizontal' && 'gap-8',
+					orientation === 'vertical' && 'flex-col items-start'
+				)}
+			>
 				{links.map((link) => {
 					const isActive = pathname === link.href;
 
 					return (
 						<NavigationMenuItem key={link.name}>
-							<NavigationMenuLink asChild>
-								<Link
-									href={link.href}
-									className={cn(
-										'transition-colors hover:bg-transparent hover:text-primary',
-										{
-											'pointer-events-none cursor-default text-primary':
-												isActive,
-										}
-									)}
-									aria-current={isActive ? 'page' : undefined}
-								>
-									{link.name}
-								</Link>
-							</NavigationMenuLink>
+							<Link
+								href={link.href}
+								className={cn(
+									'py-1 text-sm transition-colors hover:text-primary focus:text-primary-light',
+									isActive && 'pointer-events-none cursor-default text-primary'
+								)}
+								aria-current={isActive ? 'page' : undefined}
+							>
+								{link.name}
+							</Link>
 						</NavigationMenuItem>
 					);
 				})}

@@ -39,11 +39,17 @@ export function DropdownProfileMenu({
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align="end">
 				<DropdownMenuItem asChild>
-					<Link href={profileLink} className="cursor-pointer">
+					<Link
+						href={profileLink}
+						className="cursor-pointer focus-visible:outline-none"
+					>
 						Мой профиль
 					</Link>
 				</DropdownMenuItem>
-				<DropdownMenuItem onClick={() => logout()} className="cursor-pointer">
+				<DropdownMenuItem
+					onClick={() => logout()}
+					className="cursor-pointer focus-visible:outline-none"
+				>
 					<LogOutIcon />
 					Выйти
 				</DropdownMenuItem>

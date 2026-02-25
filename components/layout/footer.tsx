@@ -2,6 +2,9 @@ import { Logo } from '@/components/layout/logo';
 import { NavMenu } from '@/components/layout/nav-menu';
 import { NAV_LINKS } from '@/lib/constants';
 import { Mail } from 'lucide-react';
+import { Copyright } from '@/components/layout/copyright';
+import { Suspense } from 'react';
+import { Spinner } from '@/components/ui/spinner';
 
 export function Footer() {
 	return (
@@ -33,9 +36,9 @@ export function Footer() {
 				</div>
 
 				<div className="border-t border-border py-5">
-					<p className="text-center text-xs text-muted-foreground">
-						© {new Date().getFullYear()} WhatToCook. Все права защищены.
-					</p>
+					<Suspense fallback={<Spinner />}>
+						<Copyright />
+					</Suspense>
 				</div>
 			</div>
 		</footer>

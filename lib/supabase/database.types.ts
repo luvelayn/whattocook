@@ -99,27 +99,27 @@ export type Database = {
 					id: string;
 					ingredient_id: string;
 					name: string;
-					quantity: string;
+					quantity: number | null;
 					recipe_id: string;
-					unit: string | null;
+					unit: Database['public']['Enums']['unit_enum'] | null;
 				};
 				Insert: {
 					created_at?: string;
 					id?: string;
 					ingredient_id: string;
 					name: string;
-					quantity: string;
+					quantity?: number | null;
 					recipe_id: string;
-					unit?: string | null;
+					unit?: Database['public']['Enums']['unit_enum'] | null;
 				};
 				Update: {
 					created_at?: string;
 					id?: string;
 					ingredient_id?: string;
 					name?: string;
-					quantity?: string;
+					quantity?: number | null;
 					recipe_id?: string;
-					unit?: string | null;
+					unit?: Database['public']['Enums']['unit_enum'] | null;
 				};
 				Relationships: [
 					{
@@ -172,33 +172,33 @@ export type Database = {
 			};
 			recipes: {
 				Row: {
-					cooking_time: string | null;
+					cooking_time: Database['public']['Enums']['cooking_time_enum'];
 					created_at: string;
-					cuisines: string[];
+					cuisines: Database['public']['Enums']['cuisines_enum'][];
 					id: string;
-					meal_types: string[];
+					meal_types: Database['public']['Enums']['meal_types_enum'][];
 					photo_url: string | null;
 					title: string;
 					updated_at: string;
 					user_id: string;
 				};
 				Insert: {
-					cooking_time?: string | null;
+					cooking_time: Database['public']['Enums']['cooking_time_enum'];
 					created_at?: string;
-					cuisines?: string[];
+					cuisines: Database['public']['Enums']['cuisines_enum'][];
 					id?: string;
-					meal_types?: string[];
+					meal_types: Database['public']['Enums']['meal_types_enum'][];
 					photo_url?: string | null;
 					title: string;
 					updated_at?: string;
 					user_id: string;
 				};
 				Update: {
-					cooking_time?: string | null;
+					cooking_time?: Database['public']['Enums']['cooking_time_enum'];
 					created_at?: string;
-					cuisines?: string[];
+					cuisines?: Database['public']['Enums']['cuisines_enum'][];
 					id?: string;
-					meal_types?: string[];
+					meal_types?: Database['public']['Enums']['meal_types_enum'][];
 					photo_url?: string | null;
 					title?: string;
 					updated_at?: string;
@@ -213,18 +213,18 @@ export type Database = {
 		Functions: {
 			count_user_recipes: {
 				Args: {
-					p_cooking_time?: string;
-					p_cuisines?: string[];
-					p_meal_types?: string[];
+					p_cooking_time?: Database['public']['Enums']['cooking_time_enum'];
+					p_cuisines?: Database['public']['Enums']['cuisines_enum'][];
+					p_meal_types?: Database['public']['Enums']['meal_types_enum'][];
 				};
 				Returns: number;
 			};
 			create_recipe: {
 				Args: {
-					p_cooking_time?: string;
-					p_cuisines?: string[];
+					p_cooking_time: Database['public']['Enums']['cooking_time_enum'];
+					p_cuisines: Database['public']['Enums']['cuisines_enum'][];
 					p_ingredients: Json;
-					p_meal_types?: string[];
+					p_meal_types: Database['public']['Enums']['meal_types_enum'][];
 					p_photo_url?: string;
 					p_steps: Json;
 					p_title: string;
@@ -237,17 +237,19 @@ export type Database = {
 			};
 			get_random_recipe: {
 				Args: {
-					p_cooking_time?: string;
-					p_cuisines?: string[];
-					p_meal_types?: string[];
+					p_cooking_time?: Database['public']['Enums']['cooking_time_enum'];
+					p_cuisines?: Database['public']['Enums']['cuisines_enum'][];
+					p_meal_types?: Database['public']['Enums']['meal_types_enum'][];
 				};
 				Returns: {
-					cooking_time: string;
+					cooking_time: Database['public']['Enums']['cooking_time_enum'];
 					created_at: string;
-					cuisines: string[];
+					cuisines: Database['public']['Enums']['cuisines_enum'][];
 					id: string;
-					meal_types: string[];
+					ingredients: Json;
+					meal_types: Database['public']['Enums']['meal_types_enum'][];
 					photo_url: string;
+					steps: Json;
 					title: string;
 					updated_at: string;
 					user_id: string;
@@ -271,19 +273,19 @@ export type Database = {
 			};
 			get_user_recipes: {
 				Args: {
-					p_cooking_time?: string;
-					p_cuisines?: string[];
+					p_cooking_time?: Database['public']['Enums']['cooking_time_enum'];
+					p_cuisines?: Database['public']['Enums']['cuisines_enum'][];
 					p_limit?: number;
-					p_meal_types?: string[];
+					p_meal_types?: Database['public']['Enums']['meal_types_enum'][];
 					p_offset?: number;
 				};
 				Returns: {
-					cooking_time: string;
+					cooking_time: Database['public']['Enums']['cooking_time_enum'];
 					created_at: string;
-					cuisines: string[];
+					cuisines: Database['public']['Enums']['cuisines_enum'][];
 					id: string;
 					ingredients: Json;
-					meal_types: string[];
+					meal_types: Database['public']['Enums']['meal_types_enum'][];
 					photo_url: string;
 					steps: Json;
 					title: string;
@@ -309,10 +311,10 @@ export type Database = {
 			};
 			update_recipe: {
 				Args: {
-					p_cooking_time?: string;
-					p_cuisines?: string[];
+					p_cooking_time?: Database['public']['Enums']['cooking_time_enum'];
+					p_cuisines?: Database['public']['Enums']['cuisines_enum'][];
 					p_ingredients?: Json;
-					p_meal_types?: string[];
+					p_meal_types?: Database['public']['Enums']['meal_types_enum'][];
 					p_photo_url?: string;
 					p_recipe_id: string;
 					p_steps?: Json;
@@ -323,7 +325,28 @@ export type Database = {
 			upsert_ingredient: { Args: { ingredient_name: string }; Returns: string };
 		};
 		Enums: {
-			[_ in never]: never;
+			cooking_time_enum: 'quick' | 'medium' | 'long';
+			cuisines_enum:
+				| 'russian'
+				| 'italian'
+				| 'asian'
+				| 'caucasian'
+				| 'mexican'
+				| 'american'
+				| 'mediterranean'
+				| 'indian'
+				| 'middle eastern'
+				| 'international'
+				| 'other';
+			meal_types_enum:
+				| 'breakfast'
+				| 'lunch'
+				| 'dinner'
+				| 'snack'
+				| 'dessert'
+				| 'salad'
+				| 'drink';
+			unit_enum: 'g' | 'kg' | 'ml' | 'l' | 'tbsp' | 'tsp' | 'cup' | 'piece';
 		};
 		CompositeTypes: {
 			[_ in never]: never;
@@ -456,6 +479,31 @@ export const Constants = {
 		Enums: {},
 	},
 	public: {
-		Enums: {},
+		Enums: {
+			cooking_time_enum: ['quick', 'medium', 'long'],
+			cuisines_enum: [
+				'russian',
+				'italian',
+				'asian',
+				'caucasian',
+				'mexican',
+				'american',
+				'mediterranean',
+				'indian',
+				'middle eastern',
+				'international',
+				'other',
+			],
+			meal_types_enum: [
+				'breakfast',
+				'lunch',
+				'dinner',
+				'snack',
+				'dessert',
+				'salad',
+				'drink',
+			],
+			unit_enum: ['g', 'kg', 'ml', 'l', 'tbsp', 'tsp', 'cup', 'piece'],
+		},
 	},
 } as const;

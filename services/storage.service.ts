@@ -19,7 +19,7 @@ function getFileExtension(file: File): string {
 	return file.name.split('.').pop() ?? 'jpg';
 }
 
-export function validateAvatarFile(file: File): string | null {
+export function validateImageFile(file: File): string | null {
 	if (!ACCEPTED_TYPES.has(file.type)) {
 		return 'Поддерживаются только JPG, PNG и WebP форматы';
 	}
@@ -29,7 +29,11 @@ export function validateAvatarFile(file: File): string | null {
 	return null;
 }
 
-export async function uploadAvatar(
+export const validateAvatarFile = validateImageFile;
+export const validateRecipePhoto = validateImageFile;
+
+async function uploadFile(
+	bucket: string,
 	userId: string,
 	file: File
 ): Promise<string> {
@@ -38,7 +42,7 @@ export async function uploadAvatar(
 	const fileName = `${userId}-${Date.now()}.${ext}`;
 
 	const { error: uploadError } = await supabase.storage
-		.from('avatars')
+		.from(bucket)
 		.upload(fileName, file, {
 			cacheControl: '3600',
 			upsert: false,
@@ -50,7 +54,21 @@ export async function uploadAvatar(
 
 	const {
 		data: { publicUrl },
-	} = supabase.storage.from('avatars').getPublicUrl(fileName);
+	} = supabase.storage.from(bucket).getPublicUrl(fileName);
 
 	return publicUrl;
+}
+
+export async function uploadAvatar(
+	userId: string,
+	file: File
+): Promise<string> {
+	return uploadFile('avatars', userId, file);
+}
+
+export async function uploadRecipePhoto(
+	userId: string,
+	file: File
+): Promise<string> {
+	return uploadFile('recipe-photos', userId, file);
 }

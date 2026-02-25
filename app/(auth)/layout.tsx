@@ -1,4 +1,4 @@
-import { Logo } from '@/components/layout/logo';
+import { Header } from '@/components/layout/header';
 
 export default function AuthLayout({
 	children,
@@ -6,12 +6,10 @@ export default function AuthLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<div className="flex h-screen flex-col">
-			<header className="w-full px-9 py-4">
-				<Logo />
-			</header>
-			<div className="flex flex-1 items-center justify-center p-4 pt-0">
-				{children}
+		<div className="flex min-h-screen flex-col">
+			<Header showNav={false} showAuthButtons={false} />
+			<div className="flex flex-1 items-center justify-center p-8 pt-0">
+				<div className="w-full max-w-sm">{children}</div>
 			</div>
 		</div>
 	);

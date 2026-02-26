@@ -1,7 +1,7 @@
 import { RefObject, useRef, useState } from 'react';
 import { validateAvatarFile } from '@/services/storage.service';
 
-export type AvatarUploadState = {
+export type ImageUploadState = {
 	preview: string | null;
 	error: string;
 	inputRef: RefObject<HTMLInputElement | null>;
@@ -9,7 +9,7 @@ export type AvatarUploadState = {
 	handleRemove: () => void;
 };
 
-export function useAvatarUpload(): AvatarUploadState {
+export function useImageUpload(): ImageUploadState {
 	const [preview, setPreview] = useState<string | null>(null);
 	const [error, setError] = useState('');
 	const inputRef = useRef<HTMLInputElement>(null);

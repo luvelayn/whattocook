@@ -36,7 +36,9 @@ export function useFormValidation(customRules: CustomValidationRules = {}) {
 	const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
 
 	const validateField = useCallback(
-		(element: HTMLInputElement): boolean => {
+		(
+			element: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+		): boolean => {
 			if (!element.required && !element.value.trim()) {
 				return true;
 			}
@@ -75,8 +77,6 @@ export function useFormValidation(customRules: CustomValidationRules = {}) {
 				return newErrors;
 			});
 
-			element.setAttribute('aria-invalid', String(!isValid));
-
 			return isValid;
 		},
 		[customRules]
@@ -90,14 +90,20 @@ export function useFormValidation(customRules: CustomValidationRules = {}) {
 		});
 	};
 
-	const handleBlur = (event: FocusEvent<HTMLInputElement>) => {
+	const handleBlur = (
+		event: FocusEvent<
+			HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+		>
+	) => {
 		validateField(event.target);
 	};
 
-	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+	const handleChange = (
+		event: ChangeEvent<
+			HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+		>
+	) => {
 		const { target } = event;
-
-		target.setAttribute('aria-invalid', String(false));
 
 		if (fieldErrors[target.name]) {
 			clearFieldError(target.name);
@@ -106,13 +112,17 @@ export function useFormValidation(customRules: CustomValidationRules = {}) {
 
 	const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
 		const form = event.currentTarget;
-		const formElements = Array.from(form.elements) as HTMLInputElement[];
-		const elementsToValidate = formElements.filter((element) => element.name);
+		const formElements = Array.from(form.elements).filter(
+			(el): el is HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement =>
+				el.hasAttribute('name')
+		);
 
 		let isFormValid = true;
-		let firstInvalidField: HTMLInputElement | null = null;
+		let firstInvalidField:
+			| (HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement)
+			| null = null;
 
-		elementsToValidate.forEach((element) => {
+		formElements.forEach((element) => {
 			const isFieldValid = validateField(element);
 			if (!isFieldValid) {
 				isFormValid = false;
@@ -128,10 +138,15 @@ export function useFormValidation(customRules: CustomValidationRules = {}) {
 		}
 	};
 
+	const resetErrors = () => {
+		setFieldErrors({});
+	};
+
 	return {
 		fieldErrors,
 		validateField,
 		clearFieldError,
+		resetErrors,
 		handleBlur,
 		handleChange,
 		handleSubmit,

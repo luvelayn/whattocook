@@ -4,9 +4,9 @@ import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { Plus, User, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { AvatarUploadState } from '@/hooks/useAvatarUpload';
+import { ImageUploadState } from '@/hooks/useImageUpload';
 
-type AvatarFieldProps = AvatarUploadState & {
+type AvatarFieldProps = ImageUploadState & {
 	disabled?: boolean;
 };
 
@@ -81,7 +81,7 @@ export function AvatarField({
 			<span id="avatar-description" className="text-xs text-muted-foreground">
 				JPG, PNG или WebP до 2MB
 			</span>
-			{error && <FieldError className="text-center">{error}</FieldError>}
+			<FieldError className="text-center">{error}</FieldError>
 		</Field>
 	);
 }

@@ -21,6 +21,7 @@ export function EmailField({ error, disabled, onBlur, onChange }: FieldProps) {
 				title="Введите корректный email адрес"
 				onBlur={onBlur}
 				onChange={onChange}
+				aria-invalid={!!error}
 			/>
 			<FieldError>{error}</FieldError>
 		</Field>

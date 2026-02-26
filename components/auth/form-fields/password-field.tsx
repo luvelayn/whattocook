@@ -57,6 +57,7 @@ export function PasswordField({
 					})}
 					onBlur={onBlur}
 					onChange={onChange}
+					aria-invalid={!!error}
 				/>
 				<InputGroupAddon align="inline-end">
 					<InputGroupButton

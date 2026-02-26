@@ -21,6 +21,7 @@ export function NameField({ error, disabled, onBlur, onChange }: FieldProps) {
 				aria-errormessage="name-error"
 				onBlur={onBlur}
 				onChange={onChange}
+				aria-invalid={!!error}
 			/>
 			<FieldError>{error}</FieldError>
 		</Field>

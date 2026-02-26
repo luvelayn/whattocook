@@ -6,7 +6,7 @@ export const AUTH_ERROR_CODES = {
 	OVER_REQUEST_RATE_LIMIT: 'over_request_rate_limit',
 } as const;
 
-const AUTH_ERROR_MESSAGES: Record<string, string> = {
+export const AUTH_ERROR_MESSAGES: Record<string, string> = {
 	[AUTH_ERROR_CODES.INVALID_CREDENTIALS]: 'Неверный email или пароль',
 	[AUTH_ERROR_CODES.EMAIL_NOT_CONFIRMED]:
 		'Email не подтверждён. Проверьте вашу почту',
@@ -17,9 +17,4 @@ const AUTH_ERROR_MESSAGES: Record<string, string> = {
 		'Слишком много попыток. Попробуйте позже',
 } as const;
 
-const FALLBACK_ERROR = 'Произошла непредвиденная ошибка';
-
-export function formatAuthError(code?: string | null): string {
-	if (!code) return FALLBACK_ERROR;
-	return AUTH_ERROR_MESSAGES[code] ?? FALLBACK_ERROR;
-}
+export const FALLBACK_ERROR = 'Произошла непредвиденная ошибка';

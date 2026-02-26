@@ -28,3 +28,8 @@ export type CreateRecipeParams = Omit<
 
 export type TIngredientSuggestion =
 	Database['public']['Functions']['search_ingredients']['Returns'][number];
+
+export type TCookingTime = Database['public']['Enums']['cooking_time_enum'];
+export type TCuisine = Database['public']['Enums']['cuisines_enum'];
+export type TMealType = Database['public']['Enums']['meal_types_enum'];
+export type TUnit = Database['public']['Enums']['unit_enum'];

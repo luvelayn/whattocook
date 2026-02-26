@@ -16,7 +16,7 @@ export class RecipeError extends Error {
 	}
 }
 
-export async function createRecipe(
+export async function uploadRecipe(
 	params: CreateRecipeParams
 ): Promise<string> {
 	const supabase = await createClient();

@@ -6,8 +6,9 @@ interface AuthFormCardProps {
 	footer: React.ReactNode;
 	formId: string;
 	isPending?: boolean;
-	onSubmit: FormEventHandler<HTMLFormElement>;
 	action: (formData: FormData) => void;
+	onSubmit: FormEventHandler<HTMLFormElement>;
+	onReset: () => void;
 }
 
 export function FormCard({
@@ -15,13 +16,15 @@ export function FormCard({
 	footer,
 	formId,
 	isPending,
-	onSubmit,
 	action,
+	onSubmit,
+	onReset,
 }: AuthFormCardProps) {
 	return (
 		<Card className="border-border/40 py-10 shadow-lg">
 			<CardContent>
 				<form
+					onReset={onReset}
 					id={formId}
 					onSubmit={onSubmit}
 					action={action}

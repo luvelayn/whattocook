@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { FieldGroup } from '@/components/ui/field';
 import { AvatarField } from '@/components/auth/sign-up/avatar-field';
-import { useAvatarUpload } from '@/hooks/useAvatarUpload';
+import { useImageUpload } from '@/hooks/useImageUpload';
 import { EmailField } from '@/components/auth/form-fields/email-field';
 import { PasswordField } from '@/components/auth/form-fields/password-field';
 import { FormError } from '@/components/forms/form-error';
@@ -21,7 +21,7 @@ const initialState: FormState = {
 
 export function SignUpForm() {
 	const [state, formAction, isPending] = useActionState(signUp, initialState);
-	const avatar = useAvatarUpload();
+	const avatar = useImageUpload();
 	const {
 		fieldErrors,
 		validateField,

@@ -72,3 +72,15 @@ export async function uploadRecipePhoto(
 ): Promise<string> {
 	return uploadFile('recipe-photos', userId, file);
 }
+
+export async function deleteFileByUrl(url: string): Promise<void> {
+	const supabase = createServiceClient();
+
+	const match = url.match(/\/object\/public\/([^/]+)\/(.+)$/);
+	if (!match) throw new StorageError(`Invalid storage URL: ${url}`);
+
+	const [, bucket, fileName] = match;
+
+	const { error } = await supabase.storage.from(bucket).remove([fileName]);
+	if (error) throw new StorageError(error.message);
+}
